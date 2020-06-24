@@ -2056,7 +2056,7 @@ POTE Compiler::NewMethod()
 			byte1 = static_cast<uint8_t>(OpCode::PopStoreInstVar);
 		}
 
-		MakeQuickMethod(hdr, PRIMITIVE_SET_INSTVAR);
+		MakeQuickMethod(hdr, m_isMutable ? PRIMITIVE_SET_MUTABLE_INSTVAR : PRIMITIVE_SET_INSTVAR);
 		
 		// We go ahead and generate the bytes anyway, as they're needed by the primitive
 	}

@@ -438,6 +438,7 @@ private:
 	bool m_ok;								// Parse still ok? 
 	bool m_instVarsInitialized;
 	bool m_isCompilingExpression;
+	bool m_isMutable;
 
 	enum class SendType { Other, Self, Super };
 	CompilerFlags m_flags;							// Compiler flags
