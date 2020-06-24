@@ -361,15 +361,14 @@ unaccessData
 			[data := nil.
 			OLEAutLibrary default safeArrayUnaccessData: self]!
 
-uncheckedAt: anInteger put: anObject 
+uncheckedAt: anInteger put: anObject
 	"Private - Set the value of the element of the receiver at the specified <integer> index
 	to the specified value, which must be representable by the element class of
 	the receiver. Assumes that the receiver is a single-dimensioned array, if
 	not an error will result. .
 	Note: This isn't likely to be terribly fast!!"
 
-	self elementAt: (Array with: anInteger + self start - 1)
-		put: (self elementClass fromObject: anObject).
+	self elementAt: {anInteger + self start - 1} put: (self elementClass fromObject: anObject).
 	^anObject!
 
 upperBound: dimension

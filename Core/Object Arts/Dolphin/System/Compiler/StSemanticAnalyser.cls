@@ -136,7 +136,7 @@ checkMessage: aStMessageNode hasNiladicBlockArg: aStProgramNode code: anInteger
 						signalError: CErrIncorrectBlockArgCount
 						forNode: aStProgramNode
 						range: (aStProgramNode start to: aStProgramNode barOrStop)
-						extras: (Array with: aStMessageNode selector)]]
+						extras: {aStMessageNode selector}]]
 		ifFalse: 
 			[self
 				signalError: anInteger
@@ -172,7 +172,7 @@ checkMessage: aStMessageNode hasNonEmptyNiladicBlockArg: aStProgramNode code: an
 							signalError: CErrEmptyConditionBlock
 							forNode: aStMessageNode
 							range: aStProgramNode sourceInterval
-							extras: (Array with: aStMessageNode selector).
+							extras: {aStMessageNode selector}.
 						false]]!
 
 checkMessageArgumentCount: aMessageNode 
@@ -187,7 +187,7 @@ checkMessageHasNiladicBlockReceiver: aMessageNode
 		signalError: CWarnExpectNiladicBlockReceiver
 		forNode: aMessageNode
 		range: aMessageNode receiver sourceInterval
-		extras: (Array with: aMessageNode selector).
+		extras: {aMessageNode selector}.
 	^false!
 
 checkMessageHasNonEmptyNiladicBlockReceiver: aMessageNode
@@ -199,7 +199,7 @@ checkMessageHasNonEmptyNiladicBlockReceiver: aMessageNode
 						signalError: CErrEmptyConditionBlock
 						forNode: aMessageNode
 						range: block sourceInterval
-						extras: (Array with: aMessageNode selector).
+						extras: {aMessageNode selector}.
 					false]]!
 
 checkOptimizedKeywordMessages: aMessageNode
@@ -317,7 +317,7 @@ checkRestrictedSelectors: aMethodNode
 		signalError: CWarnRestrictedSelector
 		forNode: aMethodNode
 		range: (first start to: last stop)
-		extras: (Array with: aMethodNode selector)!
+		extras: {aMethodNode selector}!
 
 checkSupersend: aMessageNode
 	methodClass superclass isNil
@@ -456,11 +456,11 @@ signalError: anInteger forNode: aNode
 		forNode: aNode
 		extras: #()!
 
-signalError: anInteger forNode: aNode extra: anObject 
-	^self 
+signalError: anInteger forNode: aNode extra: anObject
+	^self
 		signalError: anInteger
 		forNode: aNode
-		extras: (Array with: anObject)!
+		extras: {anObject}!
 
 signalError: anInteger forNode: aNode extras: anArray 
 	^self 
