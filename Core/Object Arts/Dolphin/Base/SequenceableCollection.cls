@@ -110,7 +110,7 @@ allButLast
 allButLast: anInteger
 	"Answer a copy of the receiver containing all but the last anInteger elements. Raise an error if there are not enough elements."
 
-	^self first: self size - anInteger!
+	^self copyFrom: 1 to: self size - anInteger!
 
 anyOne
 	"Answer an arbitrary element of the collection.Raise an error if the collection is empty."

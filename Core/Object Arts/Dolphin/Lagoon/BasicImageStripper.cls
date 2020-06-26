@@ -4,7 +4,8 @@ Object subclass: #BasicImageStripper
 	instanceVariableNames: 'events'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 BasicImageStripper guid: (GUID fromString: '{51ce4971-61e8-431f-9823-437cf7293e8a}')!
 BasicImageStripper isAbstract: true!
 BasicImageStripper comment: 'Base image stripping methods. These can safely be encrypted during release.'!
@@ -201,12 +202,11 @@ foldDuplicateBytecodes
 			[:each |
 			each isPacked
 				ifFalse: 
-					[each whileMutableDo: 
-							[| bytes |
-							total := total + 1.
-							bytes := each byteCodes.
-							byteCodes add: bytes.
-							each setByteCodes: (byteCodes find: bytes)]]].
+					[| bytes |
+					total := total + 1.
+					bytes := each byteCodes.
+					byteCodes add: bytes.
+					each setByteCodes: (byteCodes find: bytes)]].
 	self
 		logFold: 'FoldBytecodes'
 		folded: total - byteCodes size

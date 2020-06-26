@@ -4,7 +4,8 @@ Magnitude subclass: #Association
 	instanceVariableNames: 'key value'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 Association guid: (GUID fromString: '{87b4c650-026e-11d3-9fd7-00a0cc3e4a32}')!
 Association comment: 'Association is a simple class to encapsulate the relationship between
 a key and a value. It is used for the elements of Dictionaries.'!
@@ -72,6 +73,14 @@ printOn: aStream
 		nextPutAll: ' -> ';
 		print: value!
 
+setKey: aKey
+	<mutable>
+	key := aKey!
+
+setValue: anObject
+	<mutable>
+	value := anObject!
+
 value
 	"Answer the 'value' of the receiver."
 
@@ -93,6 +102,8 @@ value: aValue
 !Association categoriesFor: #key:value:!initializing!public! !
 !Association categoriesFor: #owningPackage:!accessing!development!public! !
 !Association categoriesFor: #printOn:!printing!public! !
+!Association categoriesFor: #setKey:!accessing!private! !
+!Association categoriesFor: #setValue:!accessing!private! !
 !Association categoriesFor: #value!accessing!public! !
 !Association categoriesFor: #value:!accessing!public! !
 

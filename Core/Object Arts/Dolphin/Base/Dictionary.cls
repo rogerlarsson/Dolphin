@@ -4,7 +4,8 @@ Set variableSubclass: #Dictionary
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 Dictionary guid: (GUID fromString: '{87b4c526-026e-11d3-9fd7-00a0cc3e4a32}')!
 Dictionary comment: 'Class Dictionary represents a set of associations between keys and values. The values can be randomly accessed using the associated key. 
 
@@ -195,7 +196,7 @@ changeKey: key to: newKey
 	| assoc |
 	assoc := self associationAt: key.
 	self removeKey: key.
-	assoc whileMutableDo: [assoc key: newKey].
+	assoc setKey: newKey.
 	"We want to preserve the association of the element we're renaming, so we must
 	 remove any existing element with the same name"
 	self removeKey: newKey ifAbsent: [].
