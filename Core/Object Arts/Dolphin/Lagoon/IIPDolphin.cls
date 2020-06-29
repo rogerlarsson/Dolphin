@@ -4,7 +4,8 @@ IUnknown subclass: #IIPDolphin
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IIPDolphin guid: (IID fromString: '{6D0FA0A9-1A1B-467B-BB99-AD1CCDF513AA}')!
 IIPDolphin comment: '<IIPDolphin> is a wrapper class for the COM interface ''DolphinIP.IIPDolphin'' generated from type information in the ''Dolphin Smalltalk InProcStub Library 1.0'' library. It contains methods to invoke the member functions exposed by that interface.
 
