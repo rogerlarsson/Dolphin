@@ -4,7 +4,8 @@ IDispatch subclass: #CDOINNTPOnPost
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'CDOConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 CDOINNTPOnPost guid: (IID fromString: '{CD000027-8B95-11D1-82DB-00C04FB1625D}')!
 CDOINNTPOnPost comment: '<CDOINNTPOnPost> is a wrapper class for the COM interface ''CDO.INNTPOnPost'' generated from type information in the ''Microsoft CDO for Windows 2000 Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

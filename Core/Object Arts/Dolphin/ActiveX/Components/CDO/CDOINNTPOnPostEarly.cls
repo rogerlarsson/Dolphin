@@ -4,7 +4,8 @@ IDispatch subclass: #CDOINNTPOnPostEarly
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'CDOConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 CDOINNTPOnPostEarly guid: (IID fromString: '{CD000033-8B95-11D1-82DB-00C04FB1625D}')!
 CDOINNTPOnPostEarly comment: '<CDOINNTPOnPostEarly> is a wrapper class for the COM interface ''CDO.INNTPOnPostEarly'' generated from type information in the ''Microsoft CDO for Windows 2000 Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

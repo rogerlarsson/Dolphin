@@ -4,7 +4,8 @@ IDispatch subclass: #CDOINNTPEarlyScriptConnector
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'CDOConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 CDOINNTPEarlyScriptConnector guid: (IID fromString: '{CD000034-8B95-11D1-82DB-00C04FB1625D}')!
 CDOINNTPEarlyScriptConnector comment: '<CDOINNTPEarlyScriptConnector> is a wrapper class for the COM interface ''CDO.INNTPEarlyScriptConnector'' generated from type information in the ''Microsoft CDO for Windows 2000 Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

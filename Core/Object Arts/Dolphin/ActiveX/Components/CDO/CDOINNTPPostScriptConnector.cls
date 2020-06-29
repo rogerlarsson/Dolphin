@@ -4,7 +4,8 @@ IDispatch subclass: #CDOINNTPPostScriptConnector
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'CDOConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 CDOINNTPPostScriptConnector guid: (IID fromString: '{CD000031-8B95-11D1-82DB-00C04FB1625D}')!
 CDOINNTPPostScriptConnector comment: '<CDOINNTPPostScriptConnector> is a wrapper class for the COM interface ''CDO.INNTPPostScriptConnector'' generated from type information in the ''Microsoft CDO for Windows 2000 Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
