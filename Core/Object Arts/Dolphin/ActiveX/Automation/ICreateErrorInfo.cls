@@ -4,7 +4,8 @@ IUnknown subclass: #ICreateErrorInfo
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ICreateErrorInfo guid: (IID fromString: '{22F03340-547D-101B-8E65-08002B2BD119}')!
 ICreateErrorInfo comment: '<ICreateErrorInfo> is a wrapper class for the custom interface ''OAIDL.ICreateErrorInfo'' from type information in the ''Ole Automation Type Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

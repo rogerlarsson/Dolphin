@@ -4,7 +4,8 @@ IProvideClassInfo subclass: #IProvideClassInfo2
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IProvideClassInfo2 guid: (IID fromString: '{A6BC3AC0-DBAA-11CE-9DE3-00AA004BB851}')!
 IProvideClassInfo2 comment: '<IProvideClassInfo2> is a wrapper class for the COM interface ''OCIDL.IProvideClassInfo2'' generated from type information in the ''OCIDL Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
