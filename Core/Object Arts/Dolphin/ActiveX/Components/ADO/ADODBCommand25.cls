@@ -4,7 +4,8 @@ ADODBCommand15 subclass: #ADODBCommand25
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'ADODBConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ADODBCommand25 guid: (IID fromString: '{0000154E-0000-0010-8000-00AA006D2EA4}')!
 ADODBCommand25 comment: '`ADODBCommand25` is a wrapper class for the COM interface ''ADODB.Command25'' generated from type information in the ''Microsoft ActiveX Data Objects 6.1 Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
