@@ -4,7 +4,8 @@ IDispatch subclass: #IMXXMLFilter
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IMXXMLFilter guid: (IID fromString: '{C90352F7-643C-4FBC-BB23-E996EB2D51FD}')!
 IMXXMLFilter comment: '<IMXXMLFilter> is a wrapper class for the COM interface ''MSXML2.IMXXMLFilter'' generated from type information in the ''Microsoft XML, v6.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

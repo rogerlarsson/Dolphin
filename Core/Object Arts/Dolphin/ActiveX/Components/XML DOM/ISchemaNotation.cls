@@ -4,7 +4,8 @@ ISchemaItem subclass: #ISchemaNotation
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ISchemaNotation guid: (IID fromString: '{50EA08BE-DD1B-4664-9A50-C2F40F4BD79A}')!
 ISchemaNotation comment: '<ISchemaNotation> is a wrapper class for the COM interface ''MSXML2.ISchemaNotation'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

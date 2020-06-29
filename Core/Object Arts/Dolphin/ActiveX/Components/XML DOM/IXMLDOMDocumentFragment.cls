@@ -4,7 +4,8 @@ IXMLDOMNode subclass: #IXMLDOMDocumentFragment
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IXMLDOMDocumentFragment guid: (IID fromString: '{3EFAA413-272F-11D2-836F-0000F87A7782}')!
 IXMLDOMDocumentFragment comment: '<IXMLDOMDocumentFragment> is a wrapper class for the COM interface ''MSXML.IXMLDOMDocumentFragment'' generated from type information in the ''Microsoft XML, version 2.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

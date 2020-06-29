@@ -4,7 +4,8 @@ IXMLDOMNode subclass: #IXMLDOMAttribute
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IXMLDOMAttribute guid: (IID fromString: '{2933BF85-7B36-11D2-B20E-00C04F983E60}')!
 IXMLDOMAttribute comment: '<IXMLDOMAttribute> is a wrapper class for the COM interface ''MSXML.IXMLDOMAttribute'' generated from type information in the ''Microsoft XML, version 2.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

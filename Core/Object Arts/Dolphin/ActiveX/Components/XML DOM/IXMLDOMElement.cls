@@ -4,7 +4,8 @@ IXMLDOMNode subclass: #IXMLDOMElement
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IXMLDOMElement guid: (IID fromString: '{2933BF86-7B36-11D2-B20E-00C04F983E60}')!
 IXMLDOMElement comment: '<IXMLDOMElement> is a wrapper class for the COM interface ''MSXML.IXMLDOMElement'' generated from type information in the ''Microsoft XML, version 2.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

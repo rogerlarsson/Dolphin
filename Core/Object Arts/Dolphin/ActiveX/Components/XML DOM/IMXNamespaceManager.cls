@@ -4,7 +4,8 @@ IUnknown subclass: #IMXNamespaceManager
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IMXNamespaceManager guid: (IID fromString: '{C90352F6-643C-4FBC-BB23-E996EB2D51FD}')!
 IMXNamespaceManager comment: '<IMXNamespaceManager> is a wrapper class for the COM interface ''MSXML2.IMXNamespaceManager'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

@@ -4,7 +4,8 @@ IUnknown subclass: #ISAXLexicalHandler
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ISAXLexicalHandler guid: (IID fromString: '{7F85D5F5-47A8-4497-BDA5-84BA04819EA6}')!
 ISAXLexicalHandler comment: '<ISAXLexicalHandler> is a wrapper class for the COM interface ''MSXML2.ISAXLexicalHandler'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

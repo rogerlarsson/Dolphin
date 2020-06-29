@@ -4,7 +4,8 @@ IUnknown subclass: #ISAXEntityResolver
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ISAXEntityResolver guid: (IID fromString: '{99BCA7BD-E8C4-4D5F-A0CF-6D907901FF07}')!
 ISAXEntityResolver comment: '<ISAXEntityResolver> is a wrapper class for the COM interface ''MSXML2.ISAXEntityResolver'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

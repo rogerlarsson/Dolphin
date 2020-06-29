@@ -4,7 +4,8 @@ IDispatch subclass: #IXSLProcessor
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IXSLProcessor guid: (IID fromString: '{2933BF92-7B36-11D2-B20E-00C04F983E60}')!
 IXSLProcessor comment: '<IXSLProcessor> is a wrapper class for the COM interface ''MSXML2.IXSLProcessor'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

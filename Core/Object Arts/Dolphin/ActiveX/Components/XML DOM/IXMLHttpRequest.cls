@@ -4,7 +4,8 @@ IDispatch subclass: #IXMLHttpRequest
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IXMLHttpRequest guid: (IID fromString: '{ED8C108D-4349-11D2-91A4-00C04F7969E8}')!
 IXMLHttpRequest comment: '<IXMLHttpRequest> is a wrapper class for the COM interface ''MSXML.IXMLHttpRequest'' generated from type information in the ''Microsoft XML, version 2.0'' library. It contains methods to invoke the member functions exposed by that interface.
 

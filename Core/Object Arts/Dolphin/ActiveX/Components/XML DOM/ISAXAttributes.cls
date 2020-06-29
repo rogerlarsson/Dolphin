@@ -4,7 +4,8 @@ IUnknown subclass: #ISAXAttributes
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSXMLConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ISAXAttributes guid: (IID fromString: '{F078ABE1-45D2-4832-91EA-4466CE2F25C9}')!
 ISAXAttributes comment: '<ISAXAttributes> is a wrapper class for the COM interface ''MSXML2.ISAXAttributes'' generated from type information in the ''Microsoft XML, v4.0'' library. It contains methods to invoke the member functions exposed by that interface.
 
