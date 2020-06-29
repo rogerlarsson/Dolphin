@@ -4,7 +4,8 @@ IDispatch subclass: #IRegExpAbstract
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IRegExpAbstract guid: (IID fromString: '{427E61D6-DDA9-489B-9102-C745EC40641B}')!
 IRegExpAbstract isAbstract: true!
 IRegExpAbstract comment: '`IRegExpAbstract` is an abstract class implementing methods common between the Microsoft Scripting IRegExp COM interfaces.'!

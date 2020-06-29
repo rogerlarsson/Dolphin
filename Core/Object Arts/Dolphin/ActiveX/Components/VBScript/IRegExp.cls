@@ -4,7 +4,8 @@ IRegExpAbstract subclass: #IRegExp
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IRegExp guid: (IID fromString: '{3F4DACA0-160D-11D2-A8E9-00104B365C9F}')!
 IRegExp comment: '`IRegExp` is a wrapper class for the COM interface ''VBScript_RegExp_55.IRegExp'' generated from type information in the ''Microsoft VBScript Regular Expressions 5.5'' library. It contains methods to invoke the member functions exposed by that interface.
 

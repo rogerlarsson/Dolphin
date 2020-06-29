@@ -4,7 +4,8 @@ IDispatch subclass: #IMatch
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IMatch guid: (IID fromString: '{3F4DACA1-160D-11D2-A8E9-00104B365C9F}')!
 IMatch comment: '`IMatch` is a wrapper class for the COM interface ''VBScript_RegExp_55.IMatch'' generated from type information in the ''Microsoft VBScript Regular Expressions 5.5'' library. It contains methods to invoke the member functions exposed by that interface.
 

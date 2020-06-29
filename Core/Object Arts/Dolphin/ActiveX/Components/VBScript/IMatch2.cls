@@ -4,7 +4,8 @@ IMatch subclass: #IMatch2
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IMatch2 guid: (IID fromString: '{3F4DACB1-160D-11D2-A8E9-00104B365C9F}')!
 IMatch2 comment: '`IMatch2` is a wrapper class for the COM interface ''VBScript_RegExp_55.IMatch2'' generated from type information in the ''Microsoft VBScript Regular Expressions 5.5'' library. It contains methods to invoke the member functions exposed by that interface.
 
