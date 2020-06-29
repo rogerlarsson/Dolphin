@@ -4,7 +4,8 @@ IUnknown subclass: #IShellFolder
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IShellFolder guid: (IID fromString: '{000214E6-0000-0000-C000-000000000046}')!
 IShellFolder comment: ''!
 !IShellFolder categoriesForClass!COM-Interfaces! !
