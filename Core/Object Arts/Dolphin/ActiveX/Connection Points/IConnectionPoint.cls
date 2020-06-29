@@ -4,7 +4,8 @@ IUnknown subclass: #IConnectionPoint
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IConnectionPoint guid: (IID fromString: '{B196B286-BAB4-101A-B69C-00AA00341D07}')!
 IConnectionPoint comment: '<IConnectionPoint> is a wrapper class for the custom interface ''OBJIDL.IConnectionPoint'' generated from type information in the ''ObjIDL Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

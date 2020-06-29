@@ -4,7 +4,8 @@ IEnumUnknown subclass: #IEnumConnectionPoints
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IEnumConnectionPoints guid: (IID fromString: '{B196B285-BAB4-101A-B69C-00AA00341D07}')!
 IEnumConnectionPoints comment: '<IEnumConnectionPoints> is a wrapper class for the custom interface ''OBJIDL.IEnumConnectionPoints'' generated from type information in the ''ObjIDL Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
