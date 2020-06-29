@@ -4,7 +4,8 @@ IPersist subclass: #IPersistMemory
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPersistMemory guid: (IID fromString: '{BD1AE5E0-A6AE-11CE-BD37-504200C10000}')!
 IPersistMemory comment: '<IPersistMemory> is a wrapper class for the COM interface ''OCIDL.IPersistMemory'' generated from type information in the ''OCIDL Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

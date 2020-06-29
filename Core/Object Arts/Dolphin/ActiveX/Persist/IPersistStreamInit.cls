@@ -4,7 +4,8 @@ IPersistStream subclass: #IPersistStreamInit
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPersistStreamInit guid: (IID fromString: '{7FD52380-4E07-101B-AE2D-08002B2EC713}')!
 IPersistStreamInit comment: ''!
 !IPersistStreamInit categoriesForClass!COM-Interfaces! !
