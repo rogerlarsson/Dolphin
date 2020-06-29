@@ -4,7 +4,8 @@ IUnknown subclass: #IPropertyBag
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPropertyBag guid: (IID fromString: '{55272A00-42CB-11CE-8135-00AA004BB851}')!
 IPropertyBag comment: '`IPropertyBag` is a wrapper class for the COM interface ''Win32.IPropertyBag'' generated from type information in the ''Win32 API'' library. It contains methods to invoke the member functions exposed by that interface.
 
