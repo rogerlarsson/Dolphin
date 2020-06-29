@@ -4,7 +4,8 @@ IUnknown subclass: #IEnumXXXX
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IEnumXXXX guid: (IID fromString: '{87B4C59F-026E-11D3-9FD7-00A0CC3E4A32}')!
 IEnumXXXX isAbstract: true!
 IEnumXXXX comment: ''!

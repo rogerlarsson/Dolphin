@@ -4,7 +4,8 @@ IUnknown subclass: #ISupportErrorInfo
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 ISupportErrorInfo guid: (IID fromString: '{DF0B3D60-548F-101B-8E65-08002B2BD119}')!
 ISupportErrorInfo comment: '<ISupportErrorInfo> is a wrapper class for the custom interface ''OAIDL.ISupportErrorInfo'' from type information in the ''Ole Automation Type Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

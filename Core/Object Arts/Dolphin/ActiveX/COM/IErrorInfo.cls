@@ -4,7 +4,8 @@ IUnknown subclass: #IErrorInfo
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IErrorInfo guid: (IID fromString: '{1CF2B120-547D-101B-8E65-08002B2BD119}')!
 IErrorInfo comment: '<IErrorInfo> is a wrapper class for the standard OLE Automation interface IErrorInfo.
 

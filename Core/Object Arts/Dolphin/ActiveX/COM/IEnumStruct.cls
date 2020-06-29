@@ -4,7 +4,8 @@ IEnumXXXX subclass: #IEnumStruct
 	instanceVariableNames: 'elementClass'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IEnumStruct guid: (IID fromString: '{E153E32C-7CFB-4182-A9CD-E5394DB58168}')!
 IEnumStruct comment: 'IEnumStruct is a generic client implemention of IEnum for enumerating over structs. It can be parameterised with the structure type to be enumerated over on a per instance basis, eliminating the need to define a large number of IEnumStructName classes.
 
