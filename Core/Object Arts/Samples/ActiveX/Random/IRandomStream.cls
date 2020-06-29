@@ -4,7 +4,8 @@ IDispatch subclass: #IRandomStream
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IRandomStream guid: (IID fromString: '{0E2CEA3B-E6C4-11D2-833B-0020AFAB8EFE}')!
 IRandomStream comment: '<IRandomStream> is a wrapper class for the COM interface ''RANDOMLib.IRandomStream'' generated from type information in the ''Random 1.0 Type Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
