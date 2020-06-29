@@ -4,7 +4,8 @@ IDispatch subclass: #IScriptError
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: 'MSScriptControlConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IScriptError guid: (IID fromString: '{70841C78-067D-11D0-95D8-00A02463AB28}')!
 IScriptError comment: '<IScriptError> is a wrapper class for the COM interface ''MSScriptControl.IScriptError'' generated from type information in the ''Microsoft Script Control 1.0'' library. It contains methods to invoke the member functions exposed by that interface.
 
