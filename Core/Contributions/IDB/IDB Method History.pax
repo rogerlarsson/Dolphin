@@ -1,6 +1,6 @@
 ﻿| package |
 package := Package name: 'IDB Method History'.
-package paxVersion: 1;
+package paxVersion: 2;
 	basicComment: 'Extracts and presents class/method history from the change log
 Version 6b - October 2005
 For Version 6 of Dolphin Smalltalk
@@ -15,32 +15,26 @@ Public Domain Freeware
 package basicPackageVersion: 'IDB$PACKAGE$VERSION 6b'.
 
 
-package classNames
-	add: #ChunkFileMethodScanner;
-	add: #ClassHistoryBrowser;
-	add: #DiffBrowser;
-	add: #HistoryBrowser;
-	add: #MethodHistoryBrowser;
-	add: #SelectorParser;
-	yourself.
+package setClassNames: #(
+	#{ChunkFileMethodScanner}
+	#{ClassHistoryBrowser}
+	#{DiffBrowser}
+	#{HistoryBrowser}
+	#{MethodHistoryBrowser}
+	#{SelectorParser}
+).
 
-package methodNames
-	add: #ClassBrowserAbstract -> #browseMethodHistory;
-	add: #ClassBrowserAbstract -> #browseMethodHistoryForClass;
-	add: #ClassBrowserAbstract -> #canBrowseMethodHistory;
-	add: #ClassBrowserAbstract -> #canBrowseMethodHistoryForClass;
-	add: #Debugger -> #browseMethodHistory;
-	add: #Debugger -> #canBrowseMethodHistory;
-	add: #MethodBrowserShell -> #browseMethodHistory;
-	add: #MethodBrowserShell -> #canBrowseMethodHistory;
-	add: #SmalltalkToolShell -> #queryMethodHistoryCommand:;
-	yourself.
-
-package binaryGlobalNames: (Set new
-	yourself).
-
-package globalAliases: (Set new
-	yourself).
+package setMethodNames: #(
+	#(#{ClassBrowserAbstract} #browseMethodHistory)
+	#(#{ClassBrowserAbstract} #browseMethodHistoryForClass)
+	#(#{ClassBrowserAbstract} #canBrowseMethodHistory)
+	#(#{ClassBrowserAbstract} #canBrowseMethodHistoryForClass)
+	#(#{Debugger} #browseMethodHistory)
+	#(#{Debugger} #canBrowseMethodHistory)
+	#(#{MethodBrowserShell} #browseMethodHistory)
+	#(#{MethodBrowserShell} #canBrowseMethodHistory)
+	#(#{SmalltalkToolShell} #queryMethodHistoryCommand:)
+).
 
 package setPrerequisites: #(
 	'..\..\Object Arts\Dolphin\IDE\Base\Development System'
@@ -58,7 +52,8 @@ package setPrerequisites: #(
 	'..\..\Object Arts\Dolphin\MVP\Views\Slider\Dolphin Slider Control'
 	'..\..\Object Arts\Dolphin\MVP\Presenters\Text\Dolphin Text Presenter'
 	'..\..\Object Arts\Dolphin\MVP\Type Converters\Dolphin Type Converters'
-	'..\..\Object Arts\Dolphin\MVP\Models\Value\Dolphin Value Models').
+	'..\..\Object Arts\Dolphin\MVP\Models\Value\Dolphin Value Models'
+).
 
 package!
 
@@ -68,35 +63,38 @@ Object subclass: #ChunkFileMethodScanner
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 Object subclass: #SelectorParser
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 SmalltalkToolShell subclass: #DiffBrowser
 	instanceVariableNames: 'diffsPresenter'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 SmalltalkToolShell subclass: #HistoryBrowser
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 HistoryBrowser subclass: #ClassHistoryBrowser
 	instanceVariableNames: 'class list'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 HistoryBrowser subclass: #MethodHistoryBrowser
 	instanceVariableNames: 'history class selector debugger selection slider source'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
-
-"Global Aliases"!
-
+	classInstanceVariableNames: ''
+	classConstants: {}!
 
 "Loose Methods"!
 
