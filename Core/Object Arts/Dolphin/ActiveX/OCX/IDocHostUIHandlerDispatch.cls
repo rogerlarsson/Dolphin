@@ -4,7 +4,8 @@ IDispatch subclass: #IDocHostUIHandlerDispatch
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IDocHostUIHandlerDispatch guid: (IID fromString: '{425B5AF0-65F1-11D1-9611-0000F81E0D0D}')!
 IDocHostUIHandlerDispatch comment: '<IDocHostUIHandlerDispatch> is a wrapper class for the COM interface ''ActiveXHost.IDocHostUIHandlerDispatch'' generated from type information in the ''Dolphin Smalltalk Active-X Host Library'' library. It contains methods to invoke the member functions exposed by that interface.
 

@@ -4,7 +4,8 @@ IUnknown subclass: #IPropertyNotifySink
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPropertyNotifySink guid: (IID fromString: '{9BFBBC02-EFF1-101A-84ED-00AA00341D07}')!
 IPropertyNotifySink comment: '<IPropertyNotifySink> is a wrapper class for the COM interface ''ActiveXHost.IPropertyNotifySink'' generated from type information in the ''Dolphin Smalltalk Active-X Host Library'' library. It contains methods to invoke the member functions exposed by that interface.
 
