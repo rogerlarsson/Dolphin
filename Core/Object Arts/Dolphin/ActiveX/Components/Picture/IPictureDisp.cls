@@ -4,7 +4,8 @@ IDispatch subclass: #IPictureDisp
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPictureDisp guid: (IID fromString: '{7BF80981-BF32-101A-8BBB-00AA00300CAB}')!
 IPictureDisp comment: '`IPictureDisp` is a wrapper class generated for the dispatch interface ''stdole.Picture'' from type information in the ''OLE Automation'' library. It contains methods to get and set the properties and invoke the methods exposed by that interface.
 

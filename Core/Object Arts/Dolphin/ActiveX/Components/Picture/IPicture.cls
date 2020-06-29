@@ -4,7 +4,8 @@ IUnknown subclass: #IPicture
 	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 IPicture guid: (IID fromString: '{7BF80980-BF32-101A-8BBB-00AA00300CAB}')!
 IPicture comment: '`IPicture` is a wrapper class for the COM interface ''stdole.IPicture'' generated from type information in the ''OLE Automation'' library. It contains methods to invoke the member functions exposed by that interface.
 
