@@ -726,7 +726,6 @@ initialize
 		CompiledCode initialize
 	"
 
-	self addClassConstant: 'PrivateMask' value: 16r1.
 	self initializeInfoCache!
 
 initializeInfoCache

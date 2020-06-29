@@ -2,13 +2,15 @@
 
 SequencedStream subclass: #StdioFileStream
 	instanceVariableNames: 'stream flags name oldFd fd crtlib'
-	classVariableNames: 'ClassForEncoding Codecs DeviceMask ReadOnlyMask'
+	classVariableNames: 'ClassForEncoding Codecs'
 	poolDictionaries: 'CRTConstants'
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {
+		'DeviceMask' -> 16r40.
+		'ReadOnlyMask' -> 16r1
+	}!
 StdioFileStream guid: (GUID fromString: '{7b8405b3-0819-421f-8110-ca2763bcb59a}')!
 StdioFileStream isAbstract: true!
-StdioFileStream addClassConstant: 'DeviceMask' value: 16r40!
-StdioFileStream addClassConstant: 'ReadOnlyMask' value: 16r1!
 StdioFileStream comment: 'StdioFileStream is a <FileStream> implemented over C runtime library stdio streams. FileStream itself should be used by preference in most cases.
 
 Instance Variables:
@@ -518,8 +520,6 @@ fromHandle: anExternalHandle
 		mode: 'w+'!
 
 initialize
-	self addClassConstant: 'ReadOnlyMask' value: 16r01.
-	self addClassConstant: 'DeviceMask' value: 16r40.
 	self addClassConstant: 'ClassForEncoding'
 		value: (IdentityDictionary new
 				at: #binary put: StdioBinaryFileStream;
