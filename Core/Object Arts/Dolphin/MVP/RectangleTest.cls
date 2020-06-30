@@ -4,7 +4,8 @@ DolphinTest subclass: #RectangleTest
 	instanceVariableNames: 'desktop oddDesktop unary'
 	classVariableNames: ''
 	poolDictionaries: ''
-	classInstanceVariableNames: ''!
+	classInstanceVariableNames: ''
+	classConstants: {}!
 RectangleTest guid: (GUID fromString: '{aceafc61-24f9-482c-a8e7-0aff0e7fcc85}')!
 RectangleTest comment: ''!
 !RectangleTest categoriesForClass!Unclassified! !
