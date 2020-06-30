@@ -30,7 +30,7 @@ addMethodSilently: aCompiledMethod
 	!
 
 behaviorsDo: aMonadicValuable 
-	self class environment allBehaviorsDo: aMonadicValuable!
+	Smalltalk allBehaviorsDo: aMonadicValuable!
 
 includesMethod: aCompiledMethod 
 	"Answer whether the receiver includes the <CompiledMethod> argument.
