@@ -344,6 +344,13 @@ testMakePath
 						with: split second))
 		equals: filename!
 
+testPathName
+	| expected actual |
+	"We'll get a long path name"
+	expected := '\\?\', (File change: SessionManager current imageFileName extension: 'chg').
+	actual := SourceManager default changesStream file pathName.
+	self assert: actual equals: expected!
+
 testRemoveDirectory
 	self createTestDirectories.
 	
@@ -560,6 +567,7 @@ testSplitStemFrom
 !FileTest categoriesFor: #testDeleteDirectory!public!unit tests! !
 !FileTest categoriesFor: #testForDirectoriesIn!public!unit tests! !
 !FileTest categoriesFor: #testMakePath!public!unit tests! !
+!FileTest categoriesFor: #testPathName!public!unit tests! !
 !FileTest categoriesFor: #testRemoveDirectory!public!unit tests! !
 !FileTest categoriesFor: #testRemoveExtension!public!unit tests! !
 !FileTest categoriesFor: #testRemovePathDelimiter!public!unit tests! !
