@@ -92,10 +92,11 @@ associations
 	^answer!
 
 associationsDo: operation
-	"Evaluate the monadic valuable, operation, for each of the receiver's 
-	key/value mappings."
+	"Evaluate the monadic valuable, operation, for each of the receiver's key/value mappings."
 
-	super do: [:assoc | operation value: assoc]!
+	tally == 0 ifTrue: [^self].
+	1 to: self basicSize
+		do: [:index | (self basicAt: index) ifNotNil: [:element | operation value: element]]!
 
 associationsDo: aMonadicValuable separatedBy: aNiladicValuable 
 	"Evaluate the <monadicValuable> operation argument for each of the 

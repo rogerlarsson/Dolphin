@@ -92,6 +92,7 @@ package setMethodNames: #(
 	#(#{SearchPolicy class} #icon)
 	#(#{Semaphore class} #icon)
 	#(#{Set class} #icon)
+	#(#{SharedPool class} #icon)
 	#(#{Signal class} #icon)
 	#(#{SortAlgorithm class} #icon)
 	#(#{Sound class} #icon)
@@ -865,6 +866,14 @@ icon
 		textcolor: Color darkBlue;
 		yourself)! !
 !Set class categoriesFor: #icon!constants!public! !
+
+!SharedPool class methodsFor!
+
+icon
+	"Answers an Icon that can be used to represent this class"
+
+	^Collection icon! !
+!SharedPool class categoriesFor: #icon!constants!public! !
 
 !Signal class methodsFor!
 

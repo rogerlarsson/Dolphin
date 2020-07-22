@@ -686,7 +686,7 @@ public:
 
 	void BytecodeDisassembler::PrintInstVarInstruction(I ip, std::wostream& stream, const char* type, size_t index)
 	{
-		stream << type << L" InstVar[" << std::dec << index << L"]: " << context.GetInstVar(index).c_str();
+		stream << type << L" InstVar[" << std::dec << index << L"]: " << context.GetInstVar(index);
 	}
 
 	void BytecodeDisassembler::PrintSendInstruction(I ip, std::wostream& stream, int index, int argumentCount)
