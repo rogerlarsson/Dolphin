@@ -160,9 +160,6 @@ callstackDo: aMonadicValuable depth: anInteger
 			frame := frame sender.
 			i := i - 1]!
 
-debugPrintString
-	^self basicPrintString!
-
 displayOn: aStream
 	"Append a short textual description of the receiver to aStream appropriate
 	for displaying in a stack trace."
@@ -467,7 +464,6 @@ textMap
 !StackFrame categoriesFor: #bp!accessing!private! !
 !StackFrame categoriesFor: #bp:!accessing!private! !
 !StackFrame categoriesFor: #callstackDo:depth:!private! !
-!StackFrame categoriesFor: #debugPrintString!public! !
 !StackFrame categoriesFor: #displayOn:!printing!public! !
 !StackFrame categoriesFor: #environment!accessing!private! !
 !StackFrame categoriesFor: #environment:!accessing!private! !
