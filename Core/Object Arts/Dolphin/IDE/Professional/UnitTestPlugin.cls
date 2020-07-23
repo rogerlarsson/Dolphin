@@ -2,7 +2,7 @@
 
 ClassBrowserPlugin subclass: #UnitTestPlugin
 	instanceVariableNames: 'result icon autoSwitchProcess defectsPresenter modePresenter detailsPresenter'
-	classVariableNames: 'AutoSwitchDelayMs FailColor NoTestsColor PassColor RunningColor'
+	classVariableNames: 'AutoSwitchDelayMs ErrorColor FailColor NoTestsColor PassColor RunningColor'
 	poolDictionaries: ''
 	classInstanceVariableNames: ''
 	classConstants: {}!
@@ -115,6 +115,15 @@ displayDetails: aString
 	"Display aString to indicate additional details about the current mode of operation"
 
 	detailsPresenter value: aString!
+
+displayErrors
+	"Indicate that some tests have failed and we have defects"
+
+	self icon: (Icon fromId: 'UnitTestPluginFail.ico').
+	self displayColor: self class errorColor.
+	self displayMode: 'Error'.
+	self displayDetails: result displayString.
+	self ensureVisible!
 
 displayFail
 	"Indicate that some tests have failed and we have defects"
@@ -367,9 +376,9 @@ updateDefects
 	self displayDefects: result defects!
 
 updateWindow
-	result hasPassed
-		ifTrue: [self displayPass]
-		ifFalse: [self displayFail].
+	result hasErrors
+		ifTrue: [self displayErrors]
+		ifFalse: [result hasFailures ifTrue: [self displayFail] ifFalse: [self displayPass]].
 	self updateDefects! !
 !UnitTestPlugin categoriesFor: #allContextMenus!helpers!private! !
 !UnitTestPlugin categoriesFor: #allMenuBarMenus!helpers!private! !
@@ -383,6 +392,7 @@ updateWindow
 !UnitTestPlugin categoriesFor: #displayColor:!private!Updating! !
 !UnitTestPlugin categoriesFor: #displayDefects:!private!Updating! !
 !UnitTestPlugin categoriesFor: #displayDetails:!private!Updating! !
+!UnitTestPlugin categoriesFor: #displayErrors!private!Updating! !
 !UnitTestPlugin categoriesFor: #displayFail!private!Updating! !
 !UnitTestPlugin categoriesFor: #displayMode:!private!Updating! !
 !UnitTestPlugin categoriesFor: #displayOn:!displaying!private! !
@@ -436,11 +446,14 @@ defaultAutoSwitchDelay
 
 	^1 seconds!
 
-defaultFailColor
+defaultErrorColor
 	^Color
 		r: 243
 		g: 27
 		b: 65!
+
+defaultFailColor
+	^Color orange!
 
 defaultNoTestsColor
 	^Color 
@@ -459,6 +472,12 @@ defaultRunningColor
 		r: 235
 		g: 201
 		b: 65!
+
+errorColor
+	^ErrorColor!
+
+errorColor: aColor
+	ErrorColor := aColor = Color default ifTrue: [self defaultErrorColor] ifFalse: [aColor]!
 
 failColor
 	^FailColor!
@@ -479,6 +498,7 @@ initialize
 	AutoSwitchDelayMs := self defaultAutoSwitchDelay.
 	PassColor := self defaultPassColor.
 	FailColor := self defaultFailColor.
+	ErrorColor := self defaultErrorColor.
 	RunningColor := self defaultRunningColor.
 	NoTestsColor := self defaultNoTestsColor!
 
@@ -523,10 +543,13 @@ runningColor: aColor
 !UnitTestPlugin class categoriesFor: #autoSwitchDelayMs!accessing!public! !
 !UnitTestPlugin class categoriesFor: #autoSwitchDelayMs:!accessing!public! !
 !UnitTestPlugin class categoriesFor: #defaultAutoSwitchDelay!constants!private! !
+!UnitTestPlugin class categoriesFor: #defaultErrorColor!constants!private! !
 !UnitTestPlugin class categoriesFor: #defaultFailColor!constants!private! !
 !UnitTestPlugin class categoriesFor: #defaultNoTestsColor!private!Updating! !
 !UnitTestPlugin class categoriesFor: #defaultPassColor!constants!private! !
 !UnitTestPlugin class categoriesFor: #defaultRunningColor!constants!private! !
+!UnitTestPlugin class categoriesFor: #errorColor!accessing!public! !
+!UnitTestPlugin class categoriesFor: #errorColor:!accessing!public! !
 !UnitTestPlugin class categoriesFor: #failColor!accessing!public! !
 !UnitTestPlugin class categoriesFor: #failColor:!accessing!public! !
 !UnitTestPlugin class categoriesFor: #icon!constants!public! !
