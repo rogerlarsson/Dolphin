@@ -1755,10 +1755,12 @@ printMutatorBody: aSymbol on: aWriteStream
 !Association methodsFor!
 
 debugPrintOn: aStream
-	aStream
-		debugPrint: key;
-		nextPutAll: ' -> ';
-		debugPrint: value! !
+	aStream print: self
+		with: 
+			[aStream
+				debugPrint: key;
+				nextPutAll: ' -> ';
+				debugPrint: value]! !
 !Association categoriesFor: #debugPrintOn:!public! !
 
 !AXControlSite class methodsFor!
