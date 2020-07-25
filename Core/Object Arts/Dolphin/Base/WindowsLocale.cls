@@ -369,9 +369,7 @@ shortAmDesignator
 		ifAbsentPut: 
 			[VMLibrary default isWindows10OrGreater
 				ifTrue: [self getLocaleInfoString: LOCALE_SSHORTESTAM]
-				ifFalse: 
-					["Might be a wide character"
-					self amDesignator readStream next: 1]]!
+				ifFalse: [self amDesignator first]]!
 
 shortDateFormat
 	"Answer the short date format for the receiver locale."
@@ -390,9 +388,7 @@ shortPmDesignator
 		ifAbsentPut: 
 			[VMLibrary default isWindows10OrGreater
 				ifTrue: [self getLocaleInfoString: LOCALE_SSHORTESTPM]
-				ifFalse: 
-					["Might be a wide character"
-					self pmDesignator readStream next: 1]]!
+				ifFalse: [self pmDesignator first]]!
 
 shortTimeFormat
 	"Answer the short time format for the receiver locale."
