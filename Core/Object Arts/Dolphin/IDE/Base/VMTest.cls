@@ -2954,7 +2954,8 @@ verifyBinaryPrimitive: method forCases: aCollectionOfTriples
 
 verifyExtCallArgLppvoid: aBoolean
 	| method string result address |
-	method := Compiler compile: ('x: aString
+	method := Compiler
+				compile: ('x: aString
 	%<<1?overlap :>stdcall: uintptr AnswerDWORD lppvoid>
 	^_failureCode'
 						expandMacrosWith: aBoolean)
@@ -3059,7 +3060,8 @@ verifyExtCallRetHRESULT: aBoolean
 	method := self
 				compile: ('hresult: anInteger
 	%<<1?overlap :>stdcall: hresult AnswerDWORD dword>
-	^self invalidCall: _failureCode' expandMacrosWith: aBoolean)
+	^self invalidCall: _failureCode'
+						expandMacrosWith: aBoolean)
 				in: VMLibrary.
 	#(0 1 16r3FFFFFFF 16r40000000 16r7FFFFFFF) do: 
 			[:each |

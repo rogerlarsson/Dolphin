@@ -68,6 +68,11 @@ beginsWith: aString ignoreCase: aBoolean
 				count: aString size])
 			== 0!
 
+codePointsDo: operation
+	"Evaluate the <monadicValuable> argument, operation, for each of the full code point <Character> elements of the receiver. Answers the receiver. The elements are evaluated in sequence."
+
+	1 to: self size do: [:i | operation value: (self at: i)]!
+
 copyToBuffer: anAddress ofSize: anInteger
 	CRTLibrary default
 		strncpy_s: anAddress
@@ -177,6 +182,7 @@ urlDecoded
 !AnsiString categoriesFor: #asLowercase!converting!public! !
 !AnsiString categoriesFor: #asUppercase!converting!public! !
 !AnsiString categoriesFor: #beginsWith:ignoreCase:!comparing!public! !
+!AnsiString categoriesFor: #codePointsDo:!enumerating!public! !
 !AnsiString categoriesFor: #copyToBuffer:ofSize:!copying!private! !
 !AnsiString categoriesFor: #decodeAt:!encode/decode!private! !
 !AnsiString categoriesFor: #decodeNextFrom:!encode/decode!private! !

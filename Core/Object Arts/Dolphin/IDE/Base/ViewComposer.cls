@@ -449,10 +449,10 @@ clearSelection
 
 	| prompt selCount |
 	selCount := self selections size.
-	prompt := selCount > 1 
-				ifTrue: ['Are you sure you wish to remove the <1d> selected views?' expandMacrosWith: selCount]
+	prompt := selCount > 1
+				ifTrue: ['Are you sure you wish to remove the <1p> selected views?' expandMacrosWith: selCount]
 				ifFalse: 
-					['Are you sure you wish to remove the selected <1d>?' expandMacrosWith: self selections first class].
+					['Are you sure you wish to remove the selected <1p>?' expandMacrosWith: self selections first class].
 	(MessageBox confirm: prompt) ifTrue: [self deleteSelections]!
 
 clearUndoState
@@ -722,8 +722,8 @@ dereference
 
 	| referenceView dereferencedView |
 	referenceView := self primarySelection.
-	(MessageBox 
-		confirm: ('This reference to ''<1d>'' will be replaced by a copy.<n><n>Are you sure you want to continue?' 
+	(MessageBox
+		confirm: ('This reference to ''<1d>'' will be replaced by a copy.<n><n>Are you sure you want to continue?'
 				expandMacrosWith: referenceView resourceIdentifier)
 		caption: 'Dereference to copy...') ifFalse: [^self].
 	self eraseAdornment.
@@ -2134,7 +2134,7 @@ setModified
 
 shortCaption
 	| stream |
-	stream := String writeStream: 32.
+	stream := String smalltalkWriteStream: 32.
 	self printShortCaptionOn: stream.
 	^stream contents!
 
@@ -2222,11 +2222,11 @@ updateCaption
 	may need to be refreshed."
 
 	| stream |
-	stream := String writeStream: 128.
+	stream := String smalltalkWriteStream: 128.
 	self printShortCaptionOn: stream.
-	self composingView 
+	self composingView
 		ifNotNil: 
-			[:cv | 
+			[:cv |
 			stream
 				nextPut: $(;
 				display: cv class;
@@ -2385,7 +2385,7 @@ viewSaveAs
 	"Save the composed view as a resource."
 
 	| rid |
-	resourceIdentifier isNil 
+	resourceIdentifier isNil
 		ifTrue: [rid := ResourceIdentifier class: Presenter name: Presenter defaultView]
 		ifFalse: 
 			[rid := resourceIdentifier copy.
@@ -2779,11 +2779,10 @@ defaultGridResolution: anInteger
 
 	DefaultGridResolution := anInteger!
 
-displayOn: aStream
-	"Append, to aStream, a String whose characters are a representation of the receiver as a user
-	would want to see it."
+displayOn: aPuttableStream
+	"Append to the <puttableStream> first argument a String whose characters are a representation of the receiver that a user in the specified <Locale> would want to see."
 
-	aStream nextPutAll: 'View Composer'!
+	aPuttableStream nextPutAll: 'View Composer'!
 
 extentImage
 	^(Icon fromId: 'EXTENT.ICO') imageIndex!

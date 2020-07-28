@@ -12,11 +12,11 @@ WindowsLocaleTest comment: ''!
 !WindowsLocaleTest methodsFor!
 
 defaultSubject
-	^Locale lcid: 2057!
+	^Locale named: 'en-GB'!
 
 testDisplayFloatOn
 	| info subject |
-	{{Locale lcid: 2057.
+	{{Locale named: 'en-GB'.
 			{{Float infinity. '∞'}.
 				{Float negativeInfinity. '-∞'}.
 				{Float nan. 'NaN'}.
@@ -35,7 +35,7 @@ testDisplayFloatOn
 				{-123456.789. '-123,456.79'}.
 				{1234567.89. '1,234,567.89'}.
 				{-1234567.89. '-1,234,567.89'}}}.
-		{Locale lcid: 1034.
+		{Locale named: 'es-ES_tradnl'.
 			{{Float infinity. 'Infinito'}.
 				{Float negativeInfinity. '-Infinito'}.
 				{Float nan. 'NeuN'}.
@@ -61,49 +61,48 @@ testDisplayFloatOn
 				subject := each first.
 				each second do: 
 						[:pair |
-						actual := self displayFloat: pair first with: subject.
+						actual := pair first displayString: subject.
 						self assert: actual equals: pair second]].
 	"Switch to a locale with a different decimal separator and representations for Nan, Infinity, etc."
 	"Different negative number mode (2)"
-	subject := Locale lcid: 1050.
-	self assert: (self displayFloat: -0.0 with: subject) equals: '0,00'.
-	self assert: (self displayFloat: -1.25 with: subject) equals: '- 1,25'.
-	self assert: (self displayFloat: -0.0001 with: subject) equals: '0,00'.
-	self assert: (self displayFloat: -123456789.123456789 with: subject) equals: '- 123.456.789,12'.
+	subject := Locale named: 'hr-HR'.
+	self assert: (-0.0 displayString: subject) equals: '0,00'.
+	self assert: (-1.25 displayString: subject) equals: '- 1,25'.
+	self assert: (-0.0001 displayString: subject) equals: '0,00'.
+	self assert: (-123456789.123456789 displayString: subject) equals: '- 123.456.789,12'.
 	"Negative infinity does not seem to be represented consistently with respect to the normal negative sign conventions in this locale. The value is direct from Windows"
-	self assert: (self displayFloat: Float negativeInfinity with: subject) equals: '-∞'.
+	self assert: (Float negativeInfinity displayString: subject) equals: '-∞'.
 
 	"Different negative number mode (3)"
-	subject := Locale lcid: 1065.
-	self assert: (self displayFloat: -0.0 with: subject) equals: '0/00'.
-	self assert: (self displayFloat: -1.25 with: subject) equals: '1/25-'.
-	self assert: (self displayFloat: -0.0001 with: subject) equals: '0/00'.
-	self assert: (self displayFloat: -123456789.123456789 with: subject) equals: '123,456,789/12-'.
+	subject := Locale named: 'fa-IR'.
+	self assert: (-0.0 displayString: subject) equals: '0/00'.
+	self assert: (-1.25 displayString: subject) equals: '1/25-'.
+	self assert: (-0.0001 displayString: subject) equals: '0/00'.
+	self assert: (-123456789.123456789 displayString: subject) equals: '123,456,789/12-'.
 	"Ditto re: Negative infinity, which is supplied by Windows with an inconsistent representation."
-	self assert: (self displayFloat: Float negativeInfinity with: subject) equals: '-∞'.
+	self assert: (Float negativeInfinity displayString: subject) equals: '-∞'.
 
 	"Fake up the other modes - zero is bracketed"
-	subject := Locale lcid: 1033.
+	subject := Locale named: 'en-US'.
 	info := subject instVarNamed: 'info'.
 	info at: Win32Constants.LOCALE_INEGNUMBER put: 0.
-	self assert: (self displayFloat: -0.0 with: subject) equals: '0.00'.
-	self assert: (self displayFloat: -1.25 with: subject) equals: '(1.25)'.
-	self assert: (self displayFloat: -0.0001 with: subject) equals: '0.00'.
-	self assert: (self displayFloat: -123456789.123456789 with: subject) equals: '(123,456,789.12)'.
+	self assert: (-0.0 displayString: subject) equals: '0.00'.
+	self assert: (-1.25 displayString: subject) equals: '(1.25)'.
+	self assert: (-0.0001 displayString: subject) equals: '0.00'.
+	self assert: (-123456789.123456789 displayString: subject) equals: '(123,456,789.12)'.
 
 	"Mode 4 is trailing minus after space"
-	subject := Locale lcid: 1033.
+	subject := Locale named: 'en-US'.
 	(subject instVarNamed: 'info') at: Win32Constants.LOCALE_INEGNUMBER put: 4.
 	self assert: subject negativeNumberMode equals: 4.
-	self assert: (self displayFloat: -0.0 with: subject) equals: '0.00'.
-	self assert: (self displayFloat: -1.25 with: subject) equals: '1.25 -'.
-	self assert: (self displayFloat: -0.0001 with: subject) equals: '0.00'.
-	self assert: (self displayFloat: -123456789.123456789 with: subject) equals: '123,456,789.12 -'.
-!
+	self assert: (-0.0 displayString: subject) equals: '0.00'.
+	self assert: (-1.25 displayString: subject) equals: '1.25 -'.
+	self assert: (-0.0001 displayString: subject) equals: '0.00'.
+	self assert: (-123456789.123456789 displayString: subject) equals: '123,456,789.12 -'!
 
 testEnglishName
-	#(1033 'English' 2057 'English' 1034 'Spanish' 1106 'Welsh' 11274 'Spanish') pairsDo: [:lcid :language |
-		self assert: (Locale lcid: lcid) englishLanguageName equals: language]! !
+	#('smalltalk' 'English' 'en-US' 'English' 'en-GB' 'English' 'es-ES_tradnl' 'Spanish' 'cy-GB' 'Welsh' 'es-AR' 'Spanish')
+		pairsDo: [:lcid :language | self assert: (Locale named: lcid) englishLanguageName equals: language]! !
 !WindowsLocaleTest categoriesFor: #defaultSubject!helpers!private! !
 !WindowsLocaleTest categoriesFor: #testDisplayFloatOn!public!unit tests! !
 !WindowsLocaleTest categoriesFor: #testEnglishName!public!unit tests! !

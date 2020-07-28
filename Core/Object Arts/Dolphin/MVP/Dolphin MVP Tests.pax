@@ -260,7 +260,7 @@ DolphinTest subclass: #ResourceIdentifierTest
 	classInstanceVariableNames: ''
 	classConstants: {}!
 DolphinTest subclass: #TypeConverterTest
-	instanceVariableNames: 'edit savedLocale'
+	instanceVariableNames: 'edit'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''

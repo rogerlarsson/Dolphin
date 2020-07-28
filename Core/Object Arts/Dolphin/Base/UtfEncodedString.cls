@@ -79,17 +79,17 @@ allButLast: anInteger
 allSatisfy: aMonadicValuable
 	"Answer whether the <monadicValuable>, discriminator, evaluates to true for every code point in the receiver."
 
-	| stream |
+	| stream ch |
 	stream := self readStream.
-	[stream atEnd] whileFalse: [(aMonadicValuable value: stream next) ifFalse: [^false]].
+	[(ch := stream nextAvailable) isNil] whileFalse: [(aMonadicValuable value: ch) ifFalse: [^false]].
 	^true!
 
 anySatisfy: aMonadicValuable
 	"Answer whether the <monadicValuable> argument evaluates to true for any of the code points of the receiver."
 
-	| stream |
+	| stream ch |
 	stream := self readStream.
-	[stream atEnd] whileFalse: [(aMonadicValuable value: stream next) ifTrue: [^true]].
+	[(ch := stream nextAvailable) isNil] whileFalse: [(aMonadicValuable value: ch) ifTrue: [^true]].
 	^false!
 
 asArray
@@ -213,7 +213,7 @@ encodedAt: anInteger put: aCharacter
 	^self subclassResponsibility!
 
 encodedSizeAt: anInteger
-	"Private - Answer the <integer> number of code units occuppied by the <Character> whose first code unit is at the specified index in the receiver. Throw an error if the code unit at anInteger is not either an ASCII code point or a UTF-8 lead surrogate"
+	"Private - Answer the <integer> number of code units occupied by the <Character> whose first code unit is at the specified index in the receiver. Throw an error if the code unit at anInteger is not either an ASCII code point or a UTF-8 lead surrogate"
 
 	^self subclassResponsibility!
 
@@ -310,10 +310,11 @@ inject: anObject into: aDyadicValuable
 	"Evaluate the <dyadicValuable> argument, aDyadicValuable, once for each <Character> in the receiver, passing the elements as the second argument, and passing the value of the previous evaluation as the first argument, starting with the <Object> argument, initialValue. The operation must answer the value it wishes to have passed as its first argument the next time
 	it is evaluated. Answer the final value of the operation. This enumeration is particularly useful for performing summations and other statistical operations."
 
-	| nextValue stream |
+	| nextValue stream ch |
 	nextValue := anObject.
 	stream := self readStream.
-	[stream atEnd] whileFalse: [nextValue := aDyadicValuable value: nextValue value: stream next].
+	[(ch := stream nextAvailable) isNil]
+		whileFalse: [nextValue := aDyadicValuable value: nextValue value: ch].
 	^nextValue!
 
 isLeadCodeUnit: anInteger

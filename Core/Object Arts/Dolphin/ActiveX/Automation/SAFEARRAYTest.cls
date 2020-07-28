@@ -54,6 +54,22 @@ testAXRecords
 			self assert: elem x equals: i.
 			self assert: elem y equals: i]!
 
+testBoolDisplayString
+	| subject actual |
+	subject := self arrayClass length: 2 elementClass: VARIANT_BOOL.
+	subject at: 1 put: false.
+	subject at: 2 put: true.
+	actual := String streamContents: 
+					[:stream |
+					stream locale: (Locale named: 'en').
+					subject displayOn: stream].
+	self assert: actual equals: '(False, True)'.
+	actual := String streamContents: 
+					[:stream |
+					stream locale: (Locale named: 'es').
+					subject displayOn: stream].
+	self assert: actual equals: '(Falso; Verdadero)'!
+
 testElementClasses
 	| array random irand triplets |
 	triplets := #(#(#{SWORD} -32768 32767) #(#{SDWORD} -2147483648 2147483647) #(#{FLOAT} -1.25 1.25) #(#{DOUBLE} -1.23456789 1.23456789) #(#{BSTR} '' 'abc') #(#{HRESULT} ##(S_OK) ##(E_NOTIMPL)) #(#{VARIANT_BOOL} false true) #(#{CURRENCY} 99.99s2) #(#{SBYTE} -128 127) #(#{BYTE} 0 255) #(#{WORD} 0 65535) #(#{DWORD} 0 4294967295) #(#{VARIANT} 1 1.0 'abc' nil true 1.2s2 ##(DATE
@@ -145,6 +161,7 @@ threePoints: recordClass
 !SAFEARRAYTest categoriesFor: #elementClassNames!constants!private! !
 !SAFEARRAYTest categoriesFor: #newArrayOfIntegers:!helpers!private! !
 !SAFEARRAYTest categoriesFor: #testAXRecords!public!unit tests! !
+!SAFEARRAYTest categoriesFor: #testBoolDisplayString!public! !
 !SAFEARRAYTest categoriesFor: #testElementClasses!public!unit tests! !
 !SAFEARRAYTest categoriesFor: #testRecordInfo!public!unit tests! !
 !SAFEARRAYTest categoriesFor: #threePoints:!public!unit tests! !

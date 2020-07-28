@@ -16,7 +16,7 @@ defaultSubject
 
 testDisplayFloatOn
 	| subject |
-	subject := Locale smalltalk.
+	subject := self defaultSubject.
 	{{Float infinity. 'Float.Infinity'}.
 		{Float negativeInfinity. 'Float.NegativeInfinity'}.
 		{Float nan. 'Float.NaN'}.
@@ -37,7 +37,7 @@ testDisplayFloatOn
 		{-0.00001. '-1.0e-5'}} do: 
 				[:each |
 				| actual |
-				actual := String streamContents: [:s | subject displayFloat: each first on: s].
+				actual := each first displayString: subject.
 				self assert: actual equals: each second]! !
 !SmalltalkLocaleTest categoriesFor: #defaultSubject!helpers!private! !
 !SmalltalkLocaleTest categoriesFor: #testDisplayFloatOn!public! !

@@ -610,7 +610,7 @@ encodeOn: aPuttableStream put: anObject
 	^aPuttableStream basicNextPut: anObject!
 
 encoding
-	^#pointers!
+	^self class encoding!
 
 endsWith: aCollection
 	"Answer whether the receiver ends with the sequence of objects in the <Collection> argument"
@@ -637,13 +637,6 @@ errorLastObject: target
 	after the argument, target, where the latter is the last element of the receiver."
 
 	^self error: ('<1p> is my last object' expandMacrosWith: target)!
-
-errorValueNotFound: aValue
-	"Private - Report that an attempt was made to look up the key for a value which was not
-	in receiver"
-
-	^self error: ('value not found: <1p>' expandMacrosWith: aValue)
-!
 
 fifth
 	"Answer an <Object> which is the fifth element of the receiver. 
@@ -1331,12 +1324,11 @@ writeStream
 !SequenceableCollection categoriesFor: #encodeOn:next:putAll:startingAt:!encode/decode!private! !
 !SequenceableCollection categoriesFor: #encodeOn:nextPutAll:!encode/decode!private! !
 !SequenceableCollection categoriesFor: #encodeOn:put:!encode/decode!private! !
-!SequenceableCollection categoriesFor: #encoding!constants!encode/decode!private! !
+!SequenceableCollection categoriesFor: #encoding!constants!public! !
 !SequenceableCollection categoriesFor: #endsWith:!comparing!public! !
 !SequenceableCollection categoriesFor: #errorCollectionsOfDifferentSizes!enumerating!public! !
 !SequenceableCollection categoriesFor: #errorFirstObject:!exceptions!private! !
 !SequenceableCollection categoriesFor: #errorLastObject:!exceptions!private! !
-!SequenceableCollection categoriesFor: #errorValueNotFound:!exceptions!private! !
 !SequenceableCollection categoriesFor: #fifth!accessing!public! !
 !SequenceableCollection categoriesFor: #findFirst:!public!searching! !
 !SequenceableCollection categoriesFor: #findLast:!public!searching! !
@@ -1436,6 +1428,11 @@ emitEncodingMarkerOn: aPositionableStream
 
 	!
 
+encoding
+	"Answer a <Symbol> naming the encoding of instances of the receiver, which will be one of #binary, #pointers, #ansi, #utf8, #utf16le or #utf32."
+
+	^#pointers!
+
 new: anInteger streamContents: aMonadicValuable
 	| stream |
 	stream := self writeStream: anInteger.
@@ -1470,6 +1467,7 @@ writeStream: anInteger
 !SequenceableCollection class categoriesFor: #binarySearch:for:using:!public!searching! !
 !SequenceableCollection class categoriesFor: #defaultSortAlgorithm!instance creation!public! !
 !SequenceableCollection class categoriesFor: #emitEncodingMarkerOn:!encode/decode!private! !
+!SequenceableCollection class categoriesFor: #encoding!constants!public! !
 !SequenceableCollection class categoriesFor: #new:streamContents:!public!stream creation! !
 !SequenceableCollection class categoriesFor: #ofSize:!instance creation!private! !
 !SequenceableCollection class categoriesFor: #streamContents:!public!stream creation! !

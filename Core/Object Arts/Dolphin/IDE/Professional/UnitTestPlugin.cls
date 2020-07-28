@@ -24,7 +24,17 @@ Instance Variables:
 	autoSwitchProcess	<Process> started when tests are running to automatically switch to the plugin pane to show progress if the tests take a long time to complete.
 	defectsPresenter	<ListPresenter> showing a list of defects when some tests have failed
 	modePresenter		<TextPresenter> describing the current running state
-	detailsPresenter	<TextPresenter> providing further details about t ... etc ...'!
+	detailsPresenter	<TextPresenter> providing further details about the current running state
+
+Class Variables:
+	AutoSwitchDelayMs	<Integer> count of milliseconds after which the <autoSwitchProcess> will bring the plugin pane to the foreground
+	FailColor			<color> which will be used as a background colour when some tests fail
+	PassColor			<color> which will be used as a background colour when all tests pass
+	RunningColor		<color> which will be used as a background colour when tests are running
+	NoTestsColor		<color> which will be used as a background colour when no tests are available for the browser selection
+
+
+'!
 !UnitTestPlugin categoriesForClass!Browser-Plugins! !
 !UnitTestPlugin methodsFor!
 
@@ -112,7 +122,7 @@ displayErrors
 	self icon: (Icon fromId: 'UnitTestPluginFail.ico').
 	self displayColor: self class errorColor.
 	self displayMode: 'Error'.
-	self displayDetails: result displayString.
+	self displayDetails: (result displayString: Locale smalltalk).
 	self ensureVisible!
 
 displayFail
@@ -121,7 +131,7 @@ displayFail
 	self icon: (Icon fromId: 'UnitTestPluginFail.ico').
 	self displayColor: self class failColor.
 	self displayMode: 'Fail'.
-	self displayDetails: result displayString.
+	self displayDetails: (result displayString: Locale smalltalk).
 	self ensureVisible!
 
 displayMode: aString 
@@ -129,12 +139,10 @@ displayMode: aString
 
 	modePresenter value: aString!
 
-displayOn: aStream
-	"Private - Append, to aStream, a String whose characters are a representation of the receiver as a user
-	would want to see it. This will be used as the label for the tab when the receiver is being displayed
-	as a plugin within the Class Browser"
+displayOn: aPuttableStream
+	"Append to the <puttableStream> first argument a String whose characters are a representation of the receiver that a user in the specified <Locale> would want to see."
 
-	aStream nextPutAll: 'Unit Tests'!
+	aPuttableStream nextPutAll: 'Unit Tests'!
 
 displayPass
 	"Indicate that all tests passed"
@@ -142,7 +150,7 @@ displayPass
 	self icon: (Icon fromId: 'UnitTestPluginPass.ico').
 	self displayColor: self class passColor.
 	self displayMode: 'Pass'.
-	self displayDetails: result displayString!
+	self displayDetails: (result displayString: Locale smalltalk)!
 
 displayReset
 	self displayColor: self class noTestsColor.
@@ -211,26 +219,28 @@ installMenuCommands
 				select: [:each | each items anySatisfy: [:item | item command = #newMethod]].
 	methodMenuBarMenus do: [:each | self installTestCommandsInMethodMenu: each]!
 
-installTestCommandsInClassMenu: aMenu withAccelerator: needsAccel 
+installTestCommandsInClassMenu: aMenu withAccelerator: needsAccel
 	"Private - Installs the test commands required by the receiver into aMenu. If an accelerator is required (i.e. in the case of
 	non-context menus) then needsAccel should be true"
 
 	| runTestsCommandDescription toggleToTestClassCommandDescription |
-	runTestsCommandDescription := ClosedCommandDescription 
+	runTestsCommandDescription := ClosedCommandDescription
 				command: #runTests
 				description: '&Run Tests'
 				queryBlock: [:query | query isEnabled: self hasTestClass]
 				receiver: self.
 	needsAccel ifTrue: [runTestsCommandDescription acceleratorKeyString: 'Ctrl+Alt+R'].
 	runTestsCommandDescription image: self class icon.
-	toggleToTestClassCommandDescription := ClosedCommandDescription 
+	toggleToTestClassCommandDescription := ClosedCommandDescription
 				command: #toggleToTests
 				description: '&Go to <1d> '
 				queryBlock: 
-					[:query | 
+					[:query |
 					query
 						isEnabled: self hasTestClass;
-						text: (query commandDescription menuText expandMacrosWith: self toggleToTestsClassDescription)]
+						text: (query commandDescription menuText
+									expandMacrosWithArguments: {self toggleToTestsClassDescription}
+									locale: Locale smalltalk)]
 				receiver: self.
 	needsAccel ifTrue: [toggleToTestClassCommandDescription acceleratorKeyString: 'Ctrl+Alt+T'].
 	aMenu

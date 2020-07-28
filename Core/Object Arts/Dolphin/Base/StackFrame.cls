@@ -160,41 +160,40 @@ callstackDo: aMonadicValuable depth: anInteger
 			frame := frame sender.
 			i := i - 1]!
 
-displayOn: aStream
-	"Append a short textual description of the receiver to aStream appropriate
-	for displaying in a stack trace."
+displayOn: aPuttableStream
+	"Append to the <puttableStream> first argument a String whose characters are a representation of the receiver that a user in the specified <Locale> would want to see."
 
 	"Display processing will fail if this stack frame is dead"
 
 	| method class mClass selector |
 	self isDead
 		ifTrue: 
-			[aStream nextPutAll: self basicPrintString.
+			[aPuttableStream nextPutAll: self basicPrintString.
 			^self].
 	method := self method.
 	mClass := method methodClass.
 	self receiver
 		ifNil: 
 			["Assume a block which has no receiver refs"
-			aStream display: mClass]
+			aPuttableStream display: mClass]
 		ifNotNil: 
 			[:receiver |
 			class := receiver basicClass.	"Use basic class to avoid deref'ing proxies"
-			aStream nextPutAll: class name.
+			aPuttableStream nextPutAll: class name.
 			mClass == class
 				ifFalse: 
-					[aStream
+					[aPuttableStream
 						nextPut: $(;
 						display: mClass name;
 						nextPut: $)]].
-	aStream nextPutAll: '>>'.
+	aPuttableStream nextPutAll: '>>'.
 	selector := method selector.
 	method isUnbound
 		ifTrue: 
 			["Method is unbound if it is either not in the class' method dictionary, or it doesn't have the same
 			source as that currently in the dictionary"
-			aStream nextPutAll: '{unbound}'].
-	aStream nextPutAll: selector!
+			aPuttableStream nextPutAll: '{unbound}'].
+	aPuttableStream nextPutAll: selector!
 
 environment
 	"Private - Answer the environment associated with the stack frame, if any.
@@ -343,7 +342,7 @@ method: aCompiledMethod
 outer
 	^self environment!
 
-printOn: aStream 
+printOn: aStream
 	self displayOn: aStream.
 	aStream
 		nextPutAll: ' @ ';
@@ -415,7 +414,7 @@ sp: anIntegerIndex
 
 stackTrace: anInteger
 	| stackStream |
-	stackStream := String writeStream: 25 * ((anInteger max: 0) min: 20).
+	stackStream := String smalltalkWriteStream: 25 * ((anInteger max: 0) min: 20).
 	[self printStackOn: stackStream depth: anInteger] on: Error do: [:e | e notify].
 	^stackStream contents!
 
