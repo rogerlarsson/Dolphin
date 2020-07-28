@@ -243,7 +243,7 @@ testSaveRestore
 		disableRedraw.
 	"System Browser on False"
 	sb := self newSystemBrowserCard.
-	sb packages: (Array with: False owningPackage with: ClassBrowserShell owningPackage).
+	sb packages: {False owningPackage. ClassBrowserShell owningPackage}.
 	sb actualClass: False.
 
 	"Class Browser on View>>destroy with definition showing"
@@ -260,7 +260,7 @@ testSaveRestore
 
 	"Workspace"
 	ws := self newWorkspaceCard.
-	ws workspace evaluationPools: (Array with: Win32Constants with: CommCtrlConstants).
+	ws workspace evaluationPools: {Win32Constants. CommCtrlConstants}.
 
 	"View Composer"
 	vc := self newViewComposerCard.

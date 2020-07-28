@@ -78,21 +78,14 @@ scan: aStream for: aString source: aSymbol
 	(self
 		positionsOf: aString
 		in: aStream
-		firstOnly: aSymbol == #sources)
-		do:
-			[:offset | 
-			| chunk |
-			aStream position: offset.
-			chunk := self nextChunkFrom: aStream.
-			[chunk isEmpty]
-				whileFalse:
-					[chunks
-						add:
-							(Array
-								with: aSymbol
-								with: (selectorParser parse: chunk) asSymbol
-								with: chunk).
-					chunk := self nextChunkFrom: aStream]].
+		firstOnly: aSymbol == #sources) do: 
+				[:offset |
+				| chunk |
+				aStream position: offset.
+				chunk := self nextChunkFrom: aStream.
+				[chunk isEmpty] whileFalse: 
+						[chunks add: {aSymbol. (selectorParser parse: chunk) asSymbol. chunk}.
+						chunk := self nextChunkFrom: aStream]].
 	^chunks!
 
 scanChangesFileFor: aString

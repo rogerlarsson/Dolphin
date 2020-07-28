@@ -71,12 +71,8 @@ canConnect
 	acceptSocket isNil ifTrue: [^true].
 	"Check not attempting to connect to self..."
 	localHost := InternetAddress localHost.
-	^((Array 
-		with: localHost displayString asLowercase
-		with: localHost ipString
-		with: '127.0.0.1'
-		with: 'localhost') includes: addr displayString asLowercase) 
-		not!
+	^({localHost displayString asLowercase. localHost ipString. '127.0.0.1'. 'localhost'}
+		includes: addr displayString asLowercase) not!
 
 closeConnection
 	"Private - Forcibly any connection with another chat window.

@@ -3,7 +3,7 @@
 AbstractParserErrorTest subclass: #CompilerErrorTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: 'CompilerFlags'
+	poolDictionaries: ''
 	classInstanceVariableNames: ''
 	classConstants: {}!
 CompilerErrorTest guid: (GUID fromString: '{46595911-e729-41d5-92f4-57241cf25eac}')!
@@ -12,7 +12,7 @@ CompilerErrorTest comment: ''!
 !CompilerErrorTest methodsFor!
 
 defaultCompileFlags
-	^Interactive "| SyntaxCheckOnly"
+	^CompilerFlags.Interactive "| CompilerFlags.SyntaxCheckOnly"
 
  
 
@@ -83,7 +83,7 @@ testErrorsBadContext
 	"This error is untested because it is difficult to produce - the compiler will only raise it if the #allInstVarNames implementation
 	on the class returns an invalid array - this would require building a special class for this purpose, and I don't think it is worth it."
 
-	CErrBadContext!
+	SmalltalkParseErrorCodes.CErrBadContext!
 
 testErrorsBadPools
 	| source |
@@ -103,7 +103,7 @@ testErrorsBadPools
 			self
 				checkCompileError: ex
 				range: range
-				code: CErrBadPools
+				code: SmalltalkParseErrorCodes.CErrBadPools
 				line: 1
 				source: source]!
 
@@ -122,19 +122,19 @@ testErrorsLexicalExpectExtendedLiteral
 		parseExprError: '###'
 		range: (3 to: 3)
 		line: 1
-		code: LErrExpectExtendedLiteral!
+		code: SmalltalkParseErrorCodes.LErrExpectExtendedLiteral!
 
 testErrorsNonsenseAtEndOfExpression
 	self 
 		parseExprError: '1+2]3'
 		range: (1 to: 3)
 		line: 1
-		code: CErrUnterminatedStatement.
+		code: SmalltalkParseErrorCodes.CErrUnterminatedStatement.
 	self 
 		parseExprError: ' ##(1+2]3)'
 		range: (5 to: 7)
 		line: 1
-		code: CErrUnterminatedStatement!
+		code: SmalltalkParseErrorCodes.CErrUnterminatedStatement!
 
 testErrorsNonsenseAtEndOfMethod
 	"Nonense at end of method - not sure how to get this error to emerge - can do it with the Smalltalk Parser with an expression like.
@@ -145,21 +145,21 @@ testErrorsNonsenseAtEndOfMethod
 	source := 'blah ^1+2]'.
 	self 
 		parseMethodError: source
-		code: CErrUnterminatedStatement
+		code: SmalltalkParseErrorCodes.CErrUnterminatedStatement
 		range: ((source indexOf: $^) to: (source indexOf: $]) - 1).
 	source := '1+2]. 3+4'.
 	self 
 		parseExprError: source
 		range: (1 to: 3)
 		line: 1
-		code: CErrUnterminatedStatement.
+		code: SmalltalkParseErrorCodes.CErrUnterminatedStatement.
 	source := '1+2.] 3+4'.
 	mark := source indexOf: $].
 	self 
 		parseExprError: source
 		range: (mark to: mark)
 		line: 1
-		code: CErrInvalExprStart!
+		code: SmalltalkParseErrorCodes.CErrInvalExprStart!
 
 writtenNotReadRange: aString
 	"The Dolphin Compiler reports written-not-read temps against the temp declaration."

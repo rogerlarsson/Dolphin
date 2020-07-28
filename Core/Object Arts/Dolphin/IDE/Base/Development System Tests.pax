@@ -144,13 +144,13 @@ DolphinTest subclass: #XMLDOMNodeTest
 AbstractParserErrorTest subclass: #CompilerErrorTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: 'CompilerFlags'
+	poolDictionaries: ''
 	classInstanceVariableNames: ''
 	classConstants: {}!
 AbstractParserErrorTest subclass: #SmalltalkParserErrorTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: 'SmalltalkParseErrorCodes'
+	poolDictionaries: ''
 	classInstanceVariableNames: ''
 	classConstants: {}!
 BrowserEnvironmentTest subclass: #PackageEnvironmentTest

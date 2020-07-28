@@ -60,10 +60,7 @@ testAt
 	#(-1 0 2) do: [:i | self should: [subject at: i] raise: BoundsError].
 	subject := self newCollection: #(65 66 67).
 	1 to: subject size do: [:i | self assert: (subject at: i) equals: (self assimilate: 65 + i - 1)].
-	(Array
-		with: -1
-		with: 0
-		with: subject size + 1) do: [:i | self should: [subject at: i] raise: BoundsError]!
+	{-1. 0. subject size + 1} do: [:i | self should: [subject at: i] raise: BoundsError]!
 
 testBeginsWith
 	"Test SequenceableCollection>>beginsWith:"
