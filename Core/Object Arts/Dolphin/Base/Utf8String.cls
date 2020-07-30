@@ -496,7 +496,7 @@ characterForCodeUnit: anInteger
 codePage
 	"Answer the Windows code page constants for the receiver's encoding."
 
-	^Win32Constants.CP_UTF8!
+	^WinNlsConstants.CP_UTF8!
 
 elementSize
 	"Answer the size of the elements of the receiver in bytes."

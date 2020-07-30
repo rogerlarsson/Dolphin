@@ -85,7 +85,7 @@ testDisplayFloatOn
 	"Fake up the other modes - zero is bracketed"
 	subject := Locale named: 'en-US'.
 	info := subject instVarNamed: 'info'.
-	info at: Win32Constants.LOCALE_INEGNUMBER put: 0.
+	info at: WinNlsConstants.LOCALE_INEGNUMBER put: 0.
 	self assert: (-0.0 displayString: subject) equals: '0.00'.
 	self assert: (-1.25 displayString: subject) equals: '(1.25)'.
 	self assert: (-0.0001 displayString: subject) equals: '0.00'.
@@ -93,7 +93,7 @@ testDisplayFloatOn
 
 	"Mode 4 is trailing minus after space"
 	subject := Locale named: 'en-US'.
-	(subject instVarNamed: 'info') at: Win32Constants.LOCALE_INEGNUMBER put: 4.
+	(subject instVarNamed: 'info') at: WinNlsConstants.LOCALE_INEGNUMBER put: 4.
 	self assert: subject negativeNumberMode equals: 4.
 	self assert: (-0.0 displayString: subject) equals: '0.00'.
 	self assert: (-1.25 displayString: subject) equals: '1.25 -'.

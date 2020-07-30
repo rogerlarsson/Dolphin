@@ -2,8 +2,8 @@
 
 Object subclass: #Locale
 	instanceVariableNames: 'numberFormat'
-	classVariableNames: 'Invariant SystemDefault TimeZoneInfo UserDefault'
-	poolDictionaries: 'Win32Constants'
+	classVariableNames: 'InstalledUILanguages Invariant SystemDefault TimeZoneInfo UserDefault'
+	poolDictionaries: 'WinNlsConstants'
 	classInstanceVariableNames: ''
 	classConstants: {}!
 Locale guid: (GUID fromString: '{87b4c49a-026e-11d3-9fd7-00a0cc3e4a32}')!
@@ -794,6 +794,10 @@ installedSystemLocales
 
 	^WindowsLocale systemLocales: LCID_INSTALLED!
 
+installedUILanguages
+	^InstalledUILanguages
+		ifNil: [InstalledUILanguages := (WindowsLocale installedUILanguages: MUI_LANGUAGE_NAME) asSet]!
+
 invariant
 	"Answer the instance of the receiver which represents the invariant locale."
 
@@ -852,7 +856,7 @@ onStartup
 	self reset!
 
 reset
-	TimeZoneInfo := SystemDefault := nil.
+	InstalledUILanguages := TimeZoneInfo := SystemDefault := nil.
 	UserDefault := self uiDefault!
 
 smalltalk
@@ -892,6 +896,7 @@ userDefault: aLocale
 !Locale class categoriesFor: #getTimeZoneInfo!enquiries!public! !
 !Locale class categoriesFor: #initialize!class initialization!public! !
 !Locale class categoriesFor: #installedSystemLocales!enquiries!private! !
+!Locale class categoriesFor: #installedUILanguages!enquiries!public! !
 !Locale class categoriesFor: #invariant!instance creation!public! !
 !Locale class categoriesFor: #lcid:!instance creation!public! !
 !Locale class categoriesFor: #makeLangId:subLang:!enquiries!private! !
