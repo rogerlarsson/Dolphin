@@ -67,7 +67,6 @@ namespace ST
 		BehaviorOTE*			m_superclass;
 		MethodDictOTE*			m_methodDictionary;
 		InstanceSpecification	m_instanceSpec;
-		ArrayOTE*				m_subclasses;
 
 	public:
 		instvarcount_t fixedFields() const { return (m_instanceSpec.m_value >> 1) & UINT8_MAX; }
@@ -81,8 +80,7 @@ namespace ST
 		static constexpr size_t SuperclassIndex = Object::FixedSize;
 		static constexpr size_t MethodDictionaryIndex = SuperclassIndex + 1;
 		static constexpr size_t InstanceSpecificationIndex = MethodDictionaryIndex + 1;
-		static constexpr size_t SubClassesIndex = InstanceSpecificationIndex + 1;
-		static constexpr size_t FixedSize = SubClassesIndex + 1;
+		static constexpr size_t FixedSize = InstanceSpecificationIndex + 1;
 	};
 }
 
