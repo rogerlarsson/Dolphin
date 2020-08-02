@@ -1055,7 +1055,7 @@ writeJunitTestLog: aTestSuite result: aTestResult
 						at: 'message' put: each signal description;
 						at: 'type' put: each signal class name;
 						free.
-					errorNode text: each stacktrace.
+					errorNode text: each diagnostic.
 					errorNode free].
 			outcome == #failed
 				ifTrue: 
@@ -1066,7 +1066,7 @@ writeJunitTestLog: aTestSuite result: aTestResult
 						at: 'message' put: each signal description;
 						at: 'type' put: each signal class name;
 						free.
-					failureNode text: each stacktrace.
+					failureNode text: each diagnostic.
 					failureNode free].
 			outcome == #skipped
 				ifTrue: 

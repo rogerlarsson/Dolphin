@@ -30,7 +30,7 @@ Object subclass: #TestCase
 	classInstanceVariableNames: ''
 	classConstants: {}!
 Object subclass: #TestCaseResult
-	instanceVariableNames: 'case outcome duration signal stacktrace'
+	instanceVariableNames: 'case outcome duration signal stacktrace ip testMethod'
 	classVariableNames: ''
 	poolDictionaries: ''
 	classInstanceVariableNames: ''

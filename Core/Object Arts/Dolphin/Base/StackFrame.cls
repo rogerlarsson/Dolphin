@@ -342,6 +342,9 @@ method: aCompiledMethod
 outer
 	^self environment!
 
+prevIP
+	^self method byteCodeDispatcher prevIP: self ip!
+
 printOn: aStream
 	self displayOn: aStream.
 	aStream
@@ -486,6 +489,7 @@ textMap
 !StackFrame categoriesFor: #method!accessing!private! !
 !StackFrame categoriesFor: #method:!accessing!private! !
 !StackFrame categoriesFor: #outer!accessing!private! !
+!StackFrame categoriesFor: #prevIP!accessing!private! !
 !StackFrame categoriesFor: #printOn:!public! !
 !StackFrame categoriesFor: #printStackOn:depth:!public! !
 !StackFrame categoriesFor: #process!accessing!private! !
@@ -505,6 +509,17 @@ textMap
 !StackFrame categoriesFor: #textMap!accessing!development!private! !
 
 !StackFrame class methodsFor!
+
+findIP: anInteger inTextMap: aTextMap
+	"Private - Answer the index of the source map entry corresponding to the
+    	specified <integer> ip. The key of each text map entry identifies the first IP of the code generated for the range
+	of source which is held as the <interval> value."
+
+	| i size |
+	i := 1.
+	size := aTextMap size.
+	[i < size and: [anInteger > (aTextMap at: i) key]] whileTrue: [i := i + 1].
+	^i!
 
 frameClassFor: aProcess at: anInteger
 	"Private - Answer the subclass of the receiver to use to represent a stack frame in aProcess
@@ -527,6 +542,7 @@ process: aProcess index: anInteger
 
 	^(self frameClassFor: aProcess at: anInteger)
 		ifNotNil: [:frameClass | frameClass onProcess: aProcess index: anInteger]! !
+!StackFrame class categoriesFor: #findIP:inTextMap:!private! !
 !StackFrame class categoriesFor: #frameClassFor:at:!instance creation!private! !
 !StackFrame class categoriesFor: #onProcess:index:!instance creation!private! !
 !StackFrame class categoriesFor: #process:index:!instance creation!public! !

@@ -1007,12 +1007,6 @@ populateStackModel
 	stackPresenter noEventsDo: [stackPresenter list: (topFrame getFrames: depth)].
 	stackPresenter selectionOrNil: topFrame!
 
-prevIPOfFrame: aStackFrame 
-	"Private - Answer the IP of the instruction before that at which the IP of the <StackFrame>,
-	frame, is currently pointing."
-
-	^aStackFrame method byteCodeDispatcher prevIP: aStackFrame ip!
-
 process: aProcess topFrame: aStackFrame 
 	"Private - Sets the process being debugged and the top stack frame (of interest). The stack
 	frame list is populated."
@@ -1521,8 +1515,8 @@ selectionIP
 	frame := self frame.
 	ip := frame ip.
 	(ip = 1 or: [self isDisassembled]) ifTrue: [^ip].
-	prevIP := self prevIPOfFrame: frame.
-	^(frame = topFrame and: [(frame method byteCodes at: prevIP) = Break]) 
+	prevIP := frame prevIP.
+	^(frame = topFrame and: [(frame method byteCodes at: prevIP) = Break])
 		ifTrue: [ip]
 		ifFalse: [prevIP]!
 
@@ -1590,7 +1584,7 @@ source
 	^sourcePresenter source!
 
 sourceRangeAt: anInteger inTextMap: aTextMap
-	^(aTextMap lookup: (self frame findIP: anInteger inTextMap: aTextMap))
+	^(aTextMap lookup: (StackFrame findIP: anInteger inTextMap: aTextMap))
 		ifNil: [1 to: 0]
 		ifNotNil: [:entry | entry value]!
 
@@ -1951,7 +1945,6 @@ variableAtIndex: anInteger put: anObject
 !Debugger categoriesFor: #performMethodsRefactoring:name:!private!refactoring! !
 !Debugger categoriesFor: #populateImplementMenu:!helpers!private! !
 !Debugger categoriesFor: #populateStackModel!private!updating! !
-!Debugger categoriesFor: #prevIPOfFrame:!accessing!private! !
 !Debugger categoriesFor: #process:topFrame:!accessing!initializing!private! !
 !Debugger categoriesFor: #promptToSaveChanges!commands!private! !
 !Debugger categoriesFor: #queryCommand:!commands!private! !
