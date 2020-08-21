@@ -1,0 +1,78 @@
+﻿"Filed out from Dolphin Smalltalk 7"!
+
+UI.TypeConverter subclass: #'UI.InvertingConverter'
+	instanceVariableNames: 'wrappedConverter'
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+UI.InvertingConverter guid: (Core.GUID fromString: '{87b4c705-026e-11d3-9fd7-00a0cc3e4a32}')!
+UI.InvertingConverter comment: 'An InvertingConverter is a <typeConverter> used to wrap another converter to reverse the direction of conversion. Normally an InvertingConverter is not instantiated explicitly but by using the #inverted method of TypeConverter.
+
+Example:
+
+ NumberToText new inverted
+
+will yield an instance of InvertingConverter that wraps a NumberToText conversion. This is then the equivalent of TextToNumber.
+
+Instance Variables:
+
+	wrapped	<typeConverter> being inverted.
+
+'!
+!UI.InvertingConverter categoriesForClass!MVP-Type Converters-General! !
+!UI.InvertingConverter methodsFor!
+
+convertFromLeftToRight: anObject
+	"Converts anObject, to another type by applying the reverse of our
+	wrappedConverter's left to right transformation"
+	
+	^self wrappedConverter convertFromRightToLeft: anObject!
+
+convertFromRightToLeft: anObject
+	"Converts anObject, to another type by applying the reverse of our
+	wrappedConverter's right to left transformation"
+	
+	^self wrappedConverter convertFromLeftToRight: anObject!
+
+inverted
+	"Answers a type converter that reverses the direction of the receiver's conversion. 
+	Since the receiver is already inverting its wrappedConverter we can merely answer that."
+
+	^self wrappedConverter
+!
+
+wrappedConverter
+	"Private - Answer the type converter that is being wrapped (and therefore inverted) by
+	the receiver"
+
+	^wrappedConverter
+!
+
+wrappedConverter: aTypeConverter
+	"Private - Set the type converter that is being wrapped (and therefore inverted) by
+	the receiver to aTypeConverter"
+
+	wrappedConverter := aTypeConverter
+! !
+!UI.InvertingConverter categoriesFor: #convertFromLeftToRight:!converting!public! !
+!UI.InvertingConverter categoriesFor: #convertFromRightToLeft:!converting!public! !
+!UI.InvertingConverter categoriesFor: #inverted!operations!public! !
+!UI.InvertingConverter categoriesFor: #wrappedConverter!accessing!private! !
+!UI.InvertingConverter categoriesFor: #wrappedConverter:!accessing!private! !
+
+!UI.InvertingConverter class methodsFor!
+
+inverting: aTypeConverter
+	"Create an instance of the receiver that wraps aTypeConverter to effectively
+	reverse its direction of conversion"
+
+	^super new wrappedConverter: aTypeConverter; yourself!
+
+new
+	"Use #inverting:"
+
+	self shouldNotImplement! !
+!UI.InvertingConverter class categoriesFor: #inverting:!instance creation!public! !
+!UI.InvertingConverter class categoriesFor: #new!instance creation!public! !
+

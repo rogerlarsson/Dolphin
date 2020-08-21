@@ -1,12 +1,12 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-Object subclass: #ChunkFileMethodScanner
+Core.Object subclass: #ChunkFileMethodScanner
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-ChunkFileMethodScanner guid: (GUID fromString: '{b8b83c19-e601-4265-b607-2a0b2122144b}')!
+ChunkFileMethodScanner guid: (Core.GUID fromString: '{b8b83c19-e601-4265-b607-2a0b2122144b}')!
 ChunkFileMethodScanner comment: 'Scans the sources and changes file and answers a collection of either...
 - all the method versions for a specified class
 - all the method versions for a specified method in a class
@@ -46,17 +46,15 @@ positionsOf: aString in: aStream firstOnly: aBoolean
 	| positions |
 	positions := Set new.
 	aStream reset.
-	[aStream atEnd]
-		whileFalse:
+	[aStream atEnd] whileFalse: 
 			[| startPosition bytes offset |
 			aStream position > aString size ifTrue: [aStream position: aStream position - aString size].
 			startPosition := aStream position.
-			bytes := aStream nextAvailable: 500000.
+			bytes := aStream basicNextAvailable: 500000.
 			offset := 1.
-			[offset = 0]
-				whileFalse:
+			[offset = 0] whileFalse: 
 					[(offset := bytes indexOfSubCollection: aString startingAt: offset) = 0
-						ifFalse:
+						ifFalse: 
 							[positions add: startPosition + offset + aString size - 1.
 							aBoolean ifTrue: [^positions asSortedCollection].
 							offset := offset + 1]]].
@@ -107,7 +105,7 @@ scanForMethodChunks: aMethodSelector inClass: aClass
 
 	^(self scanForMethodChunksInClass: aClass) select: [:each | aMethodSelector = (each at: 2)]!
 
-scanForMethodChunksInClass: aClass 
+scanForMethodChunksInClass: aClass
 	"Answers a collection of Arrays containing all the method definitions, from both the sources
 	and change files, belonging to aClass
 
@@ -117,10 +115,9 @@ scanForMethodChunksInClass: aClass
 		at: 3 = method source"
 
 	| target |
-	target := (String writeStream)
-				nextPut: $!!;
-				nextPutAll: aClass name;
-				nextPutAll: ' methodsFor!!';
+	target := String writeStream.
+	(ChunkSourceFiler on: target sourceFileIndex: -1) emitHeaderForMethodsOf: aClass.
+	target := target
 				cr;
 				contents.
 	^(self scanSourcesFileFor: target) , (self scanChangesFileFor: target)!

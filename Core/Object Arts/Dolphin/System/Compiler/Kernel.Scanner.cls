@@ -1,0 +1,875 @@
+﻿"Filed out from Dolphin Smalltalk 7"!
+
+Core.Object subclass: #'Kernel.Scanner'
+	instanceVariableNames: 'stream buffer tokenStart currentCharacter characterType comments line errorHandler environment'
+	classVariableNames: 'EscapeChars'
+	imports: #(#{Kernel.ParseErrorCodes})
+	classInstanceVariableNames: ''
+	classConstants: {
+		'ClassificationTable' -> #(#separator nil nil nil nil nil nil nil nil #separator #separator #separator #separator #separator nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil nil #separator #binary nil nil nil #binary #binary nil #special #special #binary #binary #binary #binary #special #binary #digit #digit #digit #digit #digit #digit #digit #digit #digit #digit #special #special #binary #binary #binary #binary #binary #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #special #binary #special #special #alphabetic nil #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #alphabetic #special #binary #special #binary nil).
+		'PatternVariableCharacter' -> $`
+	}!
+Kernel.Scanner guid: (Core.GUID fromString: '{f76f2335-9125-488e-a570-5a759a6e67b7}')!
+Kernel.Scanner comment: 'SmalltalkScanner is the Smalltalk lexical analyzer. It converts source text to a stream of <StToken>''s.
+
+Note that SmalltalkScanner is based on the RBScanner class written by John Brant and Don Roberts for their Refactoring Browser. It has been extended for Dolphin to incorporate additional error reporting capabilities (such as the line number on which the error occurred), and the ability to parse Dolphin''s FFI call syntax.
+
+Instance Variables:
+	stream				<ReadStream> Input stream (method/expression source)
+	buffer				<WriteStream> Token building buffer.
+	tokenStart			<integer> position in stream at which current token starts.
+	currentCharacter		<Character> last character read from stream.
+	characterType		<Symbol>. Symbolic type of last character read from stream.
+	classificationTable	<Array> of <Symbol>. Symbolic types of each possible character (one slot per code point).
+	separatorsInLiterals	<boolean>. Whether to allow whitespace in literal constants.
+	extendedLiterals		<boolean>. Whether extended literal constants (prefixed with ##) are parsed.
+	comments			<OrderedCollection> of <Interval>. Ranges of the source occuppied by comments.
+	errorBlock			<dyadicValuable> evaluated on encountering lexical errors
+	nameSpaceCharacter	<Character>. Namespace separator character (not currently used on Dolphin)
+	line					<integer> line number of current token.
+
+Class Instance Variables:
+	classificationTable	<Array>. Used to classify characters into types.
+
+'!
+!Kernel.Scanner categoriesForClass!System-Compiler! !
+!Kernel.Scanner methodsFor!
+
+addComment: anInterval
+	(comments ifNil: [comments := OrderedCollection new: 1]) addLast: anInterval!
+
+atEnd
+	^characterType == #eof!
+
+classify: aCharacter
+	"May be asked to classify nil if peek at end of stream"
+
+	^aCharacter ifNil: [#eof] ifNotNil: [ClassificationTable lookup: aCharacter codePoint + 1]!
+
+constantExpected
+	self lexicalError: LErrExpectConst.
+	^self literalErrorToken: buffer contents stop: self previousStepPosition!
+
+contents
+	| contentsStream |
+	contentsStream := WriteStream on: (Array new: 50).
+	self do: [:each | contentsStream nextPut: each].
+	^contentsStream contents!
+
+do: aBlock
+	"Evaluate the argument, aBlock, for each of the remaining elements that can be accessed by 
+	the receiver."
+
+	[self atEnd] whileFalse: [aBlock value: self next]
+!
+
+environment
+	"Answer the <Namespace> in who's scope the receiver is scanning."
+
+	^environment!
+
+environment: anObject
+	"Set the environment for which the receiver is scanning."
+
+	environment := anObject!
+
+errorHandler: parseErrorHandler 
+	errorHandler := parseErrorHandler!
+
+errorPosition
+	^stream position!
+
+extendedLiteralExpected
+	self lexicalError: LErrExpectExtendedLiteral.
+	^self literalErrorToken: buffer contents stop: self previousStepPosition!
+
+getComments
+	| oldComments |
+	oldComments := comments.
+	comments := nil.
+	^oldComments!
+
+identifierTokenClass
+	^StIdentifierToken!
+
+illegalCharacter
+	| start badChar |
+	badChar := currentCharacter.
+	start := tokenStart - (buffer collection encodedSizeOf: badChar) + 1.
+	errorHandler
+		reportError: LErrBadChar
+		at: self errorPosition
+		line: self line
+		range: (start to: start)
+		extras: {badChar}.
+	"Skip over the bad character"
+	self step.
+	^StIllegalCharacterToken
+		start: start
+		comments: nil
+		value: badChar!
+
+illegalNumber
+	self lexicalError: LErrBadNumber range: (tokenStart to: self previousStepPosition)!
+
+lexicalError: anInteger
+	^self lexicalError: anInteger range: (tokenStart to: self errorPosition)!
+
+lexicalError: anInteger range: anInterval
+	^errorHandler
+		reportError: anInteger
+		at: self errorPosition
+		line: self line
+		range: anInterval
+		extras: #()!
+
+line
+	"Answer the one-based <integer> line number of the receiver's current position in the source
+	text."
+
+	^line!
+
+literalCharacterTokenClass
+	^self literalTokenClass!
+
+literalErrorToken: anObject stop: anInteger
+	^self literalTokenClass
+		start: tokenStart
+		comments: nil
+		value: anObject
+		stop: anInteger!
+
+literalTokenClass
+	^StLiteralToken!
+
+metaVariableExpected
+	^self lexicalError: LErrExpectMetaVariable!
+
+newFloatToken: significandInteger precision: precisionInteger exponent: exponentInteger
+	| floatValue |
+	#todo.	"Do a better job of detecting and report illegal floating point numbers that are out of range."
+	floatValue := exponentInteger - precisionInteger <= Float maxExponent
+				ifTrue: 
+					[exponentInteger >= precisionInteger
+						ifTrue: 
+							["integral value"
+							(significandInteger * (exponentInteger - precisionInteger) exp10) asFloat]
+						ifFalse: 
+							["Note that the fraction does not need to be normalized before #asFloat conversion,
+							 which will be faster than Integer>>gcd: "
+							(Fraction numerator: significandInteger
+								denominator: (exponentInteger negated + precisionInteger) exp10) asFloat]]
+				ifFalse: 
+					[self illegalNumber.
+					Float infinity * significandInteger sign].
+	^self numberTokenClass
+		start: tokenStart
+		comments: nil
+		value: floatValue
+		stop: self previousStepPosition
+		source: buffer contents!
+
+newIntegerToken: significandInteger exponent: exponentInteger
+	"Private - Return a new literal integer token. To avoid lengthy exponentiation calculation
+	for accidentally large exponents, impose an arbitrary limit."
+
+	| intValue |
+	intValue := exponentInteger <= Number maxLiteralIntegerExponent
+				ifTrue: [significandInteger * exponentInteger exp10]
+				ifFalse: 
+					[self illegalNumber.
+					0].
+	^self numberTokenClass
+		start: tokenStart
+		comments: nil
+		value: intValue
+		stop: self previousStepPosition
+		source: buffer contents!
+
+newScaledDecimalToken: significandInteger precision: precisionInteger scale: scaleInteger
+	| decimalValue |
+	decimalValue := scaleInteger <= ScaledDecimal maxPrecision
+				ifTrue: [ScaledDecimal newFromNumber: significandInteger / precisionInteger exp10 scale: scaleInteger]
+				ifFalse: 
+					[self illegalNumber.
+					0s].
+	^self numberTokenClass
+		start: tokenStart
+		comments: nil
+		value: decimalValue
+		stop: self previousStepPosition
+		source: buffer contents!
+
+next
+	| token |
+	buffer reset.
+	tokenStart := stream position.
+	token := characterType == #eof
+				ifTrue: [StEofToken start: tokenStart + 1	"The EOF token should occur after the end of input"]
+				ifFalse: [self scanToken].
+	self stripSeparators.
+	token comments: comments.
+	comments := nil.
+	^token!
+
+notificationClass
+	^Parser notificationClass!
+
+numberTokenClass
+	^StNumberLiteralToken!
+
+on: aStream
+	buffer := WriteStream on: (Utf8String new: 60).
+	stream := aStream.
+	errorHandler := self.
+	line := 1.
+	environment := Smalltalk!
+
+previousStepPosition
+	^characterType == #eof 
+		ifTrue: [stream position]
+		ifFalse: [stream position - 1]!
+
+qualifiedReferenceTokenClass
+	^StQualifiedReferenceToken!
+
+readIntegerOfRadix: anInteger
+	| value |
+	value := nil.
+	[self atEnd] whileFalse: 
+			[| digit |
+			((digit := currentCharacter digitValue) < anInteger and: [digit >= 0])
+				ifTrue: 
+					[
+					buffer nextPut: currentCharacter.
+					self step.
+					value := (value ?? 0) * anInteger + digit]
+				ifFalse: [^value]].
+	^value!
+
+recoverFromUnterminatedComment: anInteger 
+	characterType := #eof.
+	currentCharacter := nil.
+	self addComment: (anInteger to: stream position)!
+
+reportError: anInteger at: posInteger line: lineInteger range: anInterval extras: anArray
+	^(self notificationClass
+		code: anInteger
+		in: stream contents
+		for: Object
+		selector: #unknown
+		position: posInteger
+		line: lineInteger
+		range: anInterval
+		extras: anArray) signal!
+
+scanAnySymbol
+	characterType == #alphabetic ifTrue: [^self scanSymbol].
+	characterType == #binary ifTrue: [^self scanBinary: self literalTokenClass].
+	^StEofToken new!
+
+scanBinary: aClass
+	"Private - Although this does now permit binary selectors to be any length, as mandated by the ANSI
+	standard, it still deliberately excludes '-' to avoid the ambiguity in expressions such as: '1--2'. The ANSI
+	standard requires that this expression should be treated as a single send of the binary selector #-- to
+	1 with 2 as its argument, however Smalltalk has traditionally treated this as '1 - -2', one subtract minus two."
+
+	| val |
+	buffer nextPut: currentCharacter.
+	self step.
+	[characterType == #binary and: [currentCharacter ~~ $-]] whileTrue: 
+			[buffer nextPut: currentCharacter.
+			self step].
+	val := buffer contents.
+	val := val asSymbol.
+	^aClass
+		start: tokenStart
+		comments: nil
+		value: val!
+
+scanExponentInteger: significandInteger
+	"Private - Dolphin supports a literal format for integers with exponents. These are not translated to Floats."
+
+	| pos sign |
+	pos := stream position.
+	buffer nextPut: currentCharacter.
+	self step.
+	sign := self scanSign.
+	^self newIntegerToken: significandInteger
+		exponent: ((self readIntegerOfRadix: 10)
+				ifNotNil: [:exp | exp * sign]
+				ifNil: 
+					[self stepBackTo: pos.
+					0])!
+
+scanExtendedLiterals
+	| token |
+	self step.
+	token := characterType == #alphabetic
+				ifTrue: [self scanSymbol]
+				ifFalse: 
+					[characterType == #binary
+						ifTrue: [(self scanBinary: self literalTokenClass) stop: self previousStepPosition]
+						ifFalse: 
+							[currentCharacter == $'
+								ifTrue: [self scanStringSymbol]
+								ifFalse: [currentCharacter == $( ifTrue: [^self scanOptimized]]]].
+	token isNil ifTrue: [^self extendedLiteralExpected].
+	token value: (Symbol intern: token value asString).
+	^token!
+
+scanIdentifierOrKeyword
+	| name |
+	self scanName.
+	currentCharacter == $.
+		ifTrue: 
+			[| token |
+			token := self scanNameSpaceName.
+			token notNil ifTrue: [^token]].
+	(currentCharacter == $: and: [stream peek ~~ $=]) ifTrue: [^self scanKeyword].
+	name := buffer contents.
+	name = 'nil'
+		ifTrue: 
+			[^self literalTokenClass
+				start: tokenStart
+				comments: nil
+				value: nil
+				stop: self previousStepPosition].
+	name = 'true'
+		ifTrue: 
+			[^self literalTokenClass
+				start: tokenStart
+				comments: nil
+				value: true
+				stop: self previousStepPosition].
+	name = 'false'
+		ifTrue: 
+			[^self literalTokenClass
+				start: tokenStart
+				comments: nil
+				value: false
+				stop: self previousStepPosition].
+
+	^self identifierTokenClass
+		start: tokenStart
+		comments: nil
+		value: name!
+
+scanKeyword
+	| outputPosition inputPosition words |
+	words := 0.
+	
+	[words := words + 1.
+	buffer nextPut: currentCharacter.
+	outputPosition := buffer position.
+	inputPosition := stream position.
+	self step.	":"
+	characterType == #alphabetic and: 
+			[self scanName.
+			currentCharacter == $:]]
+			whileTrue.
+	"Restore to position immediately after last colon"
+	buffer position: outputPosition.
+	stream position: inputPosition.
+	self step.
+	^words == 1
+		ifTrue: 
+			[StKeywordToken
+				start: tokenStart
+				comments: nil
+				value: buffer contents]
+		ifFalse: 
+			[| name |
+			name := buffer contents.
+			StMultiKeywordLiteralToken
+				start: tokenStart
+				comments: nil
+				value: name asSymbol
+				stop: tokenStart + name size - 1]!
+
+scanLiteral
+	self step.
+	characterType == #alphabetic ifTrue: [^self scanSymbol].
+	characterType == #binary
+		ifTrue: [^(self scanBinary: self literalTokenClass) stop: self previousStepPosition].
+	currentCharacter == $' ifTrue: [^self scanStringSymbol].
+	(currentCharacter == $( or: [currentCharacter == $[]) ifTrue: [^self scanLiteralArrayToken].
+	currentCharacter == ${ ifTrue: [^self scanQualifiedReference].
+	currentCharacter == $# ifTrue: [^self scanExtendedLiterals].
+	^self constantExpected!
+
+scanLiteralArrayToken
+	| token |
+	token := StLiteralArrayToken
+				start: tokenStart
+				comments: nil
+				value: (AnsiString with: $# with: currentCharacter).
+	self step.
+	^token!
+
+scanLiteralCharacter
+	| value stop |
+	self step.	"$"
+	stop := stream position.
+	self atEnd
+		ifTrue: 
+			[value := $\0.
+			self lexicalError: LErrExpectChar]
+		ifFalse: 
+			[value := currentCharacter.
+			self step.	"char"
+			"Extended syntax for special characters?"
+			value == $\
+				ifTrue: 
+					[(EscapeChars lookup: currentCharacter)
+						ifNil: 
+							[currentCharacter == $x
+								ifTrue: 
+									["Explicit hex code point, e.g. $\x20"
+									self step.
+									value := (self readIntegerOfRadix: 16)
+												ifNil: 
+													["eof or non-hex digit"
+													stop := stream position.
+													self lexicalError: LErrExpectCodePoint.
+													$\0]
+												ifNotNil: 
+													[:codePoint |
+													stop := self previousStepPosition.
+													"Maximum Unicode code point is U+10FFFF, but last valid char is U+10FFFD"
+													(Character isValidCodePoint: codePoint)
+														ifTrue: [Character value: codePoint]
+														ifFalse: 
+															["Code point out of range"
+															self lexicalError: LErrBadCodePoint range: (tokenStart to: stop).
+															$\0]]]]
+						ifNotNil: 
+							[:char |
+							"One of the special chars such as $\t for tab"
+							value := char.
+							stop := stream position.
+							self step]]].
+	^self literalCharacterTokenClass
+		start: tokenStart
+		comments: nil
+		value: value
+		stop: stop!
+
+scanLiteralString
+	self step.
+	
+	[currentCharacter isNil ifTrue: [^self unterminatedString].
+	currentCharacter == $' and: [self step ~~ $']]
+			whileFalse: 
+				[buffer nextPut: currentCharacter.
+				self step].
+	^self literalTokenClass
+		start: tokenStart
+		comments: nil
+		value: buffer contents
+		stop: self previousStepPosition!
+
+scanName
+	[characterType == #alphabetic or: [characterType == #digit]] whileTrue: 
+			[buffer nextPut: currentCharacter.
+			self step]!
+
+scanNameSpaceName
+	(self classify: stream peek) ~~ #alphabetic ifTrue: [^nil].
+	buffer nextPut: $..
+	self step.
+	self scanName.
+	currentCharacter == $. ifTrue: [^self scanNameSpaceName].
+	^StIdentifierToken
+		start: tokenStart
+		comments: nil
+		value: buffer contents!
+
+scanNumber: signInteger
+	| integerPart |
+	(integerPart := self readIntegerOfRadix: 10)
+		ifNil: 
+			["This should not happen since we have previously detected a digit"
+			^self error: 'internal error'].
+	self atEnd
+		ifFalse: 
+			["The type of number is determined by what we find next"
+			currentCharacter == $.
+				ifTrue: [^self scanSmalltalkReal: integerPart sign: signInteger]
+				ifFalse: 
+					[currentCharacter == $r
+						ifTrue: 
+							[(integerPart between: 2 and: 36)
+								ifTrue: 
+									[| pos |
+									pos := stream position.
+									buffer nextPut: $r.
+									self step.
+									(self readIntegerOfRadix: integerPart)
+										ifNotNil: 
+											[:significand |
+											currentCharacter == $e
+												ifTrue: [^self scanExponentInteger: significand * signInteger]
+												ifFalse: [integerPart := significand]]
+										ifNil: 
+											["ungobble the 'r', as this appears not to be a radix prefix"
+											self stepBackTo: pos]]]
+						ifFalse: 
+							[currentCharacter == $s
+								ifTrue: 
+									["s will always be part of token, regardless if there is a scale value"
+									buffer nextPut: $s.
+									self step.
+									^self
+										newScaledDecimalToken: integerPart * signInteger
+										precision: 0
+										scale: (self readIntegerOfRadix: 10) ?? 0]
+								ifFalse: 
+									["Also support St-80 format integer of the form 1e5, not valid ANSI syntax though"
+									currentCharacter == $e ifTrue: [^self scanExponentInteger: integerPart * signInteger]]]]].
+	^self newIntegerToken: integerPart * signInteger exponent: 0!
+
+scanOptimized
+	self step.
+	^StOptimizedToken
+		start: tokenStart
+		comments: nil
+		stop: self previousStepPosition!
+
+scanQualifiedReference
+	"Scan the opening quote of literal qualified reference, i.e. the #{ of e.g. #{Root.Smalltalk}."
+	"In the original RBScanner, qualified references were scanned in their entirety as a literal token with no special token or node type to represent them. That design has a couple of issues:
+		i) Error reporting and recovery is better if the QR scanned as 3 components (open, identifier, close) and the composite is parsed
+		ii) QRs are 'homed' in the namespace of the method in which they are sited. This information is not available until semantic analysis, so it isn't possible to construct a valid literal value at scanning or parsing time, and the semantic analyser/code generator needs a specific node type to recognise when it is required to generate a BindingReference."
+
+	| token |
+	token := self qualifiedReferenceTokenClass start: tokenStart.
+	self step.
+	^token!
+
+scanSign
+	^currentCharacter == $-
+		ifTrue: 
+			[buffer nextPut: $-.
+			self step.
+			-1]
+		ifFalse: 
+			["Allow plus sign, e.g. 2e+16, although not strictly Smalltalk syntax,
+			 because Dolphin has historically used C library functions for
+			 printing/scanning floats."
+			currentCharacter == $+
+				ifTrue: 
+					[buffer nextPut: $+.
+					self step].
+			1]!
+
+scanSmalltalkReal: anInteger sign: signInteger
+	| fractionStart fractionalPart scale significand precision exponent |
+	(self classify: stream peek) == #digit
+		ifFalse: 
+			["Trailing full stop after an integer"
+			^self newIntegerToken: anInteger * signInteger exponent: 0].
+	"Step over the decimal point"
+	buffer nextPut: $..
+	self step.
+	fractionStart := stream position.
+	fractionalPart := self readIntegerOfRadix: 10.
+	scale := self previousStepPosition - fractionStart + 1.
+	significand := fractionalPart == 0
+				ifTrue: 
+					[precision := 0.
+					anInteger]
+				ifFalse: 
+					[precision := scale.
+					anInteger * precision exp10 + fractionalPart].
+
+	"Process any exponent..."
+	(currentCharacter == $e or: [currentCharacter == $d or: [currentCharacter == $q]])
+		ifTrue: 
+			[| exponentStart exponentSign |
+			exponentStart := stream position.
+			"Step over the exponent character"
+			buffer nextPut: currentCharacter.
+			self step.
+			"Allow plus prefix on the exponent, although not ANSI Smalltalk syntax"
+			exponentSign := self scanSign.
+			exponent := self readIntegerOfRadix: 10.
+			exponent
+				ifNil: 
+					["Found Float with trailing exponent character which is not
+					 part of the number, e.g. 1.5e From ANSI standard p 28: 'An
+					 exponentLetter must be followed by an explicit exponent'"
+					self stepBackTo: exponentStart.
+					exponent := 0]
+				ifNotNil: [exponent := exponent * exponentSign]]
+		ifFalse: 
+			[currentCharacter == $s
+				ifTrue: 
+					[buffer nextPut: $s.
+					self step.	"Skip the $s"
+					^self
+						newScaledDecimalToken: significand * signInteger
+						precision: precision
+						scale: (self readIntegerOfRadix: 10) ?? scale].
+			exponent := 0].
+	^self
+		newFloatToken: significand
+		precision: precision
+		exponent: exponent!
+
+scanSpecialCharacter
+	| character |
+	currentCharacter == $:
+		ifTrue: 
+			[self step.
+			^currentCharacter == $=
+				ifTrue: 
+					[self step.
+					StAssignmentToken start: tokenStart]
+				ifFalse: 
+					[StSpecialCharacterToken
+						start: tokenStart
+						comments: nil
+						value: $:]].
+	character := currentCharacter.
+	self step.
+	^StSpecialCharacterToken
+		start: tokenStart
+		comments: nil
+		value: character!
+
+scanStringSymbol
+	| literalToken |
+	literalToken := self scanLiteralString.
+	literalToken value: literalToken value asSymbol.
+	^literalToken!
+
+scanSymbol
+	| lastPosition hasColon value startPosition |
+	hasColon := false.
+	startPosition := lastPosition := stream position.
+	[characterType == #alphabetic] whileTrue: 
+			[self scanName.
+			currentCharacter == $:
+				ifTrue: 
+					[buffer nextPut: $:.
+					hasColon := true.
+					lastPosition := stream position.
+					self step]].
+	value := buffer contents.
+	(hasColon and: [value last ~~ $:])
+		ifTrue: 
+			[stream position: lastPosition.
+			self step.
+			value := value first: lastPosition - startPosition + 1].
+	^self literalTokenClass
+		start: tokenStart
+		comments: nil
+		value: value asSymbol
+		stop: self previousStepPosition!
+
+scanToken
+	"fast-n-ugly. Don't write stuff like this. Has been found to cause cancer in laboratory rats. Basically a 
+	case statement. Didn't use Dictionary because lookup is pretty slow."
+
+	characterType == #alphabetic ifTrue: [^self scanIdentifierOrKeyword].
+	characterType == #digit ifTrue: [^self scanNumber: 1].
+	(currentCharacter == $- and: [(self classify: stream peek) == #digit])
+		ifTrue: 
+			[buffer nextPut: $-.
+			self step.
+			^self scanNumber: -1].
+	characterType == #binary ifTrue: [^self scanBinary: StBinarySelectorToken].
+	characterType == #special ifTrue: [^self scanSpecialCharacter].
+	currentCharacter == $' ifTrue: [^self scanLiteralString].
+	currentCharacter == $# ifTrue: [^self scanLiteral].
+	currentCharacter == $$ ifTrue: [^self scanLiteralCharacter].
+	^self illegalCharacter!
+
+step
+	| index |
+	(currentCharacter := stream nextAvailable) isNil
+		ifTrue: 
+			[characterType := #eof.
+			^nil].
+	(index := currentCharacter code) == 10 ifTrue: [line := line + 1].
+	characterType := ClassificationTable lookup: index + 1.
+	^currentCharacter!
+
+stepBackTo: anInteger
+	| offset |
+	offset := anInteger - 1.
+	buffer skip: offset - self previousStepPosition.
+	stream position: offset.
+	self step!
+
+stripSeparators
+	
+	[[characterType == #separator] whileTrue: [self step].
+	currentCharacter == $"] whileTrue: 
+				[| start stop |
+				start := stream position.
+				
+				[| ch |
+				stream atEnd ifTrue: [^self unterminatedComment: start].
+				ch := stream next.
+				ch == $\n ifTrue: [line := line + 1].
+				ch == $"]
+						whileFalse.
+				stop := stream position.
+				self step.
+				self addComment: (start to: stop)]!
+
+unterminatedComment: anInteger 
+	self lexicalError: LErrCommentNotClosed range: (anInteger to: self errorPosition).
+	^self recoverFromUnterminatedComment: anInteger!
+
+unterminatedString
+	self lexicalError: LErrStringNotClosed.
+	^self literalErrorToken: buffer contents stop: self previousStepPosition! !
+!Kernel.Scanner categoriesFor: #addComment:!private!scanning! !
+!Kernel.Scanner categoriesFor: #atEnd!public!testing! !
+!Kernel.Scanner categoriesFor: #classify:!private!scanning! !
+!Kernel.Scanner categoriesFor: #constantExpected!error handling!private! !
+!Kernel.Scanner categoriesFor: #contents!accessing!public! !
+!Kernel.Scanner categoriesFor: #do:!enumerating!public! !
+!Kernel.Scanner categoriesFor: #environment!accessing!public! !
+!Kernel.Scanner categoriesFor: #environment:!accessing!public! !
+!Kernel.Scanner categoriesFor: #errorHandler:!initializing!private! !
+!Kernel.Scanner categoriesFor: #errorPosition!accessing!error handling!public! !
+!Kernel.Scanner categoriesFor: #extendedLiteralExpected!error handling!private! !
+!Kernel.Scanner categoriesFor: #getComments!accessing!public! !
+!Kernel.Scanner categoriesFor: #identifierTokenClass!constants!private! !
+!Kernel.Scanner categoriesFor: #illegalCharacter!error handling!private! !
+!Kernel.Scanner categoriesFor: #illegalNumber!error handling!private! !
+!Kernel.Scanner categoriesFor: #lexicalError:!error handling!private! !
+!Kernel.Scanner categoriesFor: #lexicalError:range:!error handling!private! !
+!Kernel.Scanner categoriesFor: #line!accessing!public! !
+!Kernel.Scanner categoriesFor: #literalCharacterTokenClass!public!scanning! !
+!Kernel.Scanner categoriesFor: #literalErrorToken:stop:!error handling!private! !
+!Kernel.Scanner categoriesFor: #literalTokenClass!constants!private! !
+!Kernel.Scanner categoriesFor: #metaVariableExpected!error handling!private! !
+!Kernel.Scanner categoriesFor: #newFloatToken:precision:exponent:!helpers!private! !
+!Kernel.Scanner categoriesFor: #newIntegerToken:exponent:!helpers!private! !
+!Kernel.Scanner categoriesFor: #newScaledDecimalToken:precision:scale:!helpers!private! !
+!Kernel.Scanner categoriesFor: #next!accessing!public! !
+!Kernel.Scanner categoriesFor: #notificationClass!constants!error handling!private! !
+!Kernel.Scanner categoriesFor: #numberTokenClass!constants!private! !
+!Kernel.Scanner categoriesFor: #on:!initializing!private! !
+!Kernel.Scanner categoriesFor: #previousStepPosition!accessing!private! !
+!Kernel.Scanner categoriesFor: #qualifiedReferenceTokenClass!constants!private! !
+!Kernel.Scanner categoriesFor: #readIntegerOfRadix:!private!scanning! !
+!Kernel.Scanner categoriesFor: #recoverFromUnterminatedComment:!error handling!private! !
+!Kernel.Scanner categoriesFor: #reportError:at:line:range:extras:!error handling!private! !
+!Kernel.Scanner categoriesFor: #scanAnySymbol!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanBinary:!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanExponentInteger:!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanExtendedLiterals!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanIdentifierOrKeyword!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanKeyword!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanLiteral!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanLiteralArrayToken!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanLiteralCharacter!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanLiteralString!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanName!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanNameSpaceName!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanNumber:!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanOptimized!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanQualifiedReference!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanSign!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanSmalltalkReal:sign:!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanSpecialCharacter!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanStringSymbol!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanSymbol!private!scanning! !
+!Kernel.Scanner categoriesFor: #scanToken!accessing!public! !
+!Kernel.Scanner categoriesFor: #step!operations!private! !
+!Kernel.Scanner categoriesFor: #stepBackTo:!helpers!private! !
+!Kernel.Scanner categoriesFor: #stripSeparators!private!scanning! !
+!Kernel.Scanner categoriesFor: #unterminatedComment:!error handling!private! !
+!Kernel.Scanner categoriesFor: #unterminatedString!error handling!private! !
+
+Kernel.Scanner methodProtocol: #parseErrorHandler attributes: #(#readOnly) selectors: #(#reportError:at:line:range:extras:)!
+
+!Kernel.Scanner class methodsFor!
+
+classify: aCharacter
+	"May be asked to classify nil if peek at end of stream"
+
+	^aCharacter ifNil: [#eof] ifNotNil: [ClassificationTable lookup: aCharacter code + 1]!
+
+initialize
+	| escapeChars |
+	self initializeClassificationTable.
+	escapeChars := IdentityDictionary new.
+	Character.EscapeChars
+		keysAndValuesDo: [:i :c | c ifNotNil: [escapeChars at: c put: (Character value: i - 1)]].
+	self addClassConstant: 'EscapeChars'
+		value: (escapeChars
+				shrink;
+				isImmutable: true;
+				yourself)!
+
+initializeClassificationTable
+	| classificationTable |
+	classificationTable := Array new: 128.
+	"#2130 ANSI Smalltalk allows only the English alphabet and underscore as letters in identifiers"
+	'_ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+		do: [:alpha | classificationTable at: alpha codePoint + 1 put: #alphabetic].
+	'01234567890' do: [:digit | classificationTable at: digit codePoint + 1 put: #digit].
+	'!!%&*+,-/<=>?@\~|' do: [:binary | classificationTable at: binary codePoint + 1 put: #binary].
+	'().:;[]{}^' do: [:special | classificationTable at: special codePoint + 1 put: #special].
+	(Character byteCharacterSet select: [:each | each isSeparator])
+		do: [:separator | classificationTable at: separator codePoint + 1 put: #separator].
+	classificationTable at: $\0 codePoint + 1 put: #separator.
+	classificationTable isImmutable: true.
+	self addClassConstant: 'ClassificationTable' value: classificationTable!
+
+isSelector: aSymbol
+	| scanner token |
+	scanner := self basicNew.
+	scanner on: (ReadStream on: aSymbol asString).
+	scanner step.
+	token := scanner scanAnySymbol.
+	token isLiteralToken ifFalse: [^false].
+	token value isEmpty ifTrue: [^false].
+	^scanner atEnd!
+
+isVariable: aString
+	| scanner token |
+	aString isString ifFalse: [^false].
+	aString isEmpty ifTrue: [^false].
+	(ClassificationTable lookup: aString first codePoint + 1) == #alphabetic ifFalse: [^false].
+	scanner := self basicNew.
+	scanner on: (ReadStream on: aString asString).
+	scanner step.
+	token := scanner next.
+	^token isIdentifier and: [token stop = aString size]!
+
+on: aStream 
+	| scanner |
+	scanner := self basicNew on: aStream.
+	scanner
+		step;
+		stripSeparators.
+	^scanner!
+
+on: aStream errorHandler: parseErrorHandler 
+	| scanner |
+	scanner := self basicNew on: aStream.
+	scanner
+		errorHandler: parseErrorHandler;
+		step;
+		stripSeparators.
+	^scanner!
+
+patternVariableCharacter
+	^PatternVariableCharacter! !
+!Kernel.Scanner class categoriesFor: #classify:!public!scanning! !
+!Kernel.Scanner class categoriesFor: #initialize!development!initializing!public! !
+!Kernel.Scanner class categoriesFor: #initializeClassificationTable!initializing!private! !
+!Kernel.Scanner class categoriesFor: #isSelector:!public!testing! !
+!Kernel.Scanner class categoriesFor: #isVariable:!public!testing! !
+!Kernel.Scanner class categoriesFor: #on:!instance creation!public! !
+!Kernel.Scanner class categoriesFor: #on:errorHandler:!instance creation!public! !
+!Kernel.Scanner class categoriesFor: #patternVariableCharacter!accessing!public! !
+

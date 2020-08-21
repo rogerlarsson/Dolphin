@@ -1,9 +1,9 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-BrowserEnvironmentWrapper subclass: #PluggableEnvironment
+Refactory.Browser.BrowserEnvironmentWrapper subclass: #'Smalltalk.PluggableEnvironment'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
 PluggableEnvironment guid: (GUID fromString: '{09ce2832-6e4a-40f8-83c8-b7685a4f6b62}')!
@@ -21,12 +21,12 @@ addMethods: methodCollection
 		yourself!
 
 classesAndSelectorsDo: aBlock 
-	environment classesDo: 
+	self allClassesDo: 
 			[:class | 
 			self selectorsForClass: class do: [:sel | aBlock value: class value: sel]]!
 
 classesDo: aBlock
-	environment classesDo: [:each | (self includesAnyMethodsOf: each) ifTrue: [aBlock value: each]]!
+	self allClassesDo: [:each | (self includesAnyMethodsOf: each) ifTrue: [aBlock value: each]]!
 
 includesAnyMethodsOf: aClass 
 	aClass selectorsAndMethodsDo: 
@@ -55,7 +55,7 @@ selectorsForClass: aClass do: aBlock
 snapshot
 	"Answer a static snapshot of this dynamic method environment."
 
-	^(SelectorEnvironment onMethods: self allMethods in: environment)
+	^(Refactory.Browser.SelectorEnvironment onMethods: self allMethods in: environment)
 		label: self label;
 		yourself!
 

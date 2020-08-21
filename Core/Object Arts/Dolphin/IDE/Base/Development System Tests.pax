@@ -1,30 +1,30 @@
 ﻿| package |
 package := Package name: 'Development System Tests'.
-package paxVersion: 2;
+package paxVersion: 2.1;
 	preDeclareClassesOnLoad: false;
 	basicComment: ''.
 
 
 package setClassNames: #(
-	#{AbstractParserErrorTest}
-	#{CompiledMethodTest}
-	#{CompilerErrorTest}
-	#{CompilerTest}
-	#{CompilerTestClasses}
-	#{DolphinCompilerTestMethods}
-	#{DolphinCompilerTestMethodsSubclass}
-	#{KeyedAspectTest}
-	#{PackageEnvironmentTest}
-	#{PluggableEnvironmentTest}
-	#{ProductReleaseTest}
-	#{RegKeyTest}
-	#{RewriteTestCase}
-	#{SmalltalkParserErrorTest}
-	#{SmalltalkParserTest}
-	#{SmalltalkSystemTest}
-	#{VersionResourceTest}
-	#{VMTest}
-	#{XMLDOMNodeTest}
+	#{Kernel.CompiledMethodTest}
+	#{Kernel.Tests.AbstractParserErrorTest}
+	#{Kernel.Tests.CompilerErrorTest}
+	#{Kernel.Tests.CompilerTest}
+	#{Kernel.Tests.CompilerTestClasses}
+	#{Kernel.Tests.DolphinCompilerTestMethods}
+	#{Kernel.Tests.DolphinCompilerTestMethodsSubclass}
+	#{Kernel.Tests.ParserErrorTest}
+	#{Kernel.Tests.ParserTest}
+	#{Kernel.Tests.VMTest}
+	#{OS.Tests.RegKeyTest}
+	#{Smalltalk.KeyedAspectTest}
+	#{Smalltalk.PackageEnvironmentTest}
+	#{Smalltalk.PluggableEnvironmentTest}
+	#{Smalltalk.ProductReleaseTest}
+	#{Smalltalk.RewriteTestCase}
+	#{Smalltalk.SmalltalkSystemTest}
+	#{Smalltalk.VersionResourceTest}
+	#{Smalltalk.XMLDOMNodeTest}
 ).
 
 package setPrerequisites: #(
@@ -55,120 +55,120 @@ package!
 
 "Class Definitions"!
 
-Object subclass: #DolphinCompilerTestMethods
+Core.Object subclass: #'Kernel.Tests.DolphinCompilerTestMethods'
 	instanceVariableNames: 'iv1 iv2'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {
 		'Const' -> 16r1
 	}!
-DolphinCompilerTestMethods subclass: #DolphinCompilerTestMethodsSubclass
+Kernel.Tests.DolphinCompilerTestMethods subclass: #'Kernel.Tests.DolphinCompilerTestMethodsSubclass'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-TestCase subclass: #RewriteTestCase
+XProgramming.SUnit.TestCase subclass: #RewriteTestCase
 	instanceVariableNames: 'env'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #AbstractParserErrorTest
+Core.Tests.DolphinTest subclass: #'Kernel.Tests.AbstractParserErrorTest'
 	instanceVariableNames: 'errors'
 	classVariableNames: ''
-	poolDictionaries: 'SmalltalkParseErrorCodes'
+	imports: #(#{Kernel.ParseErrorCodes} #{External})
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #CompiledMethodTest
+Core.Tests.DolphinTest subclass: #'Kernel.CompiledMethodTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #CompilerTest
+Core.Tests.DolphinTest subclass: #'Kernel.Tests.CompilerTest'
 	instanceVariableNames: 'defaultCompileFlags'
 	classVariableNames: 'TempInstrs'
-	poolDictionaries: 'CompilerFlags OpcodePool SmalltalkParseErrorCodes'
+	imports: #(#{Kernel.CompilerFlags} #{Kernel.OpcodePool} #{Kernel.ParseErrorCodes})
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #KeyedAspectTest
+Core.Tests.DolphinTest subclass: #KeyedAspectTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #ProductReleaseTest
+Core.Tests.DolphinTest subclass: #'Kernel.Tests.ParserTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #(#{External.ExtCallArgTypes} #{Kernel.ParseErrorCodes})
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #RegKeyTest
+Core.Tests.DolphinTest subclass: #ProductReleaseTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+Core.Tests.DolphinTest subclass: #'OS.Tests.RegKeyTest'
 	instanceVariableNames: 'testKey'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #SmalltalkParserTest
-	instanceVariableNames: ''
-	classVariableNames: ''
-	poolDictionaries: 'ExtCallArgTypes SmalltalkParseErrorCodes'
-	classInstanceVariableNames: ''
-	classConstants: {}!
-DolphinTest subclass: #SmalltalkSystemTest
+Core.Tests.DolphinTest subclass: #SmalltalkSystemTest
 	instanceVariableNames: 'devsys'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #VersionResourceTest
+Core.Tests.DolphinTest subclass: #VersionResourceTest
 	instanceVariableNames: 'updatePath sourceModule sourceSize sourceBytes'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #VMTest
+Core.Tests.DolphinTest subclass: #'Kernel.Tests.VMTest'
 	instanceVariableNames: 'expiryHandler'
 	classVariableNames: ''
-	poolDictionaries: 'CRTConstants'
+	imports: #(#{OS.CRTConstants})
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTest subclass: #XMLDOMNodeTest
+Core.Tests.DolphinTest subclass: #XMLDOMNodeTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-AbstractParserErrorTest subclass: #CompilerErrorTest
+Kernel.Tests.AbstractParserErrorTest subclass: #'Kernel.Tests.CompilerErrorTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-AbstractParserErrorTest subclass: #SmalltalkParserErrorTest
+Kernel.Tests.AbstractParserErrorTest subclass: #'Kernel.Tests.ParserErrorTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-BrowserEnvironmentTest subclass: #PackageEnvironmentTest
+Refactory.Browser.Tests.BrowserEnvironmentTest subclass: #PackageEnvironmentTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-BrowserEnvironmentTest subclass: #PluggableEnvironmentTest
+Refactory.Browser.Tests.BrowserEnvironmentTest subclass: #PluggableEnvironmentTest
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DolphinTestClassResource subclass: #CompilerTestClasses
+Core.Tests.DolphinTestClassResource subclass: #'Kernel.Tests.CompilerTestClasses'
 	instanceVariableNames: 'testClass'
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
 

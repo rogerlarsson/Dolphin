@@ -1,28 +1,17 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-GUID variableByteSubclass: #CLSID
+Core.GUID variableByteSubclass: #CLSID
 	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-CLSID guid: (GUID fromString: '{87b4c643-026e-11d3-9fd7-00a0cc3e4a32}')!
+CLSID guid: (Core.GUID fromString: '{87b4c643-026e-11d3-9fd7-00a0cc3e4a32}')!
 CLSID comment: 'CLSID the class of 128-bit Globally Unique Identifiers (guids) which are specifically used to uniquely identify coclasses (components) in COM.
 
 The CLSIDs of all coclasses registered on your machine can be found under the HKCR\CLSID key in your registry. Each correctly formed entry will have a human (are VB programmers human?) readable form (a ProgID) directly under HKCR.'!
 !CLSID categoriesForClass!External-Data-Structured-COM! !
 !CLSID methodsFor!
-
-asString
-	"Answer a string representation of the receiver which is expected to be a CLSID (if not
-	an error may result)."
-
-	| buf answer |
-	buf := COMTaskMemory new.
-	OLELibrary default stringFromCLSID: self lplpsz: buf.
-	answer := String fromUtf16String: buf.
-	buf free.	"remove finalization overhead by explicity freeing"
-	^answer!
 
 displayOn: aPuttableStream
 	"Append to the <puttableStream> first argument a String whose characters are a representation of the receiver that an end-user might want to see."
@@ -40,7 +29,6 @@ progID
 	answer := String fromUtf16String: pProgId.
 	pProgId free.
 	^answer! !
-!CLSID categoriesFor: #asString!converting!public! !
 !CLSID categoriesFor: #displayOn:!displaying!public! !
 !CLSID categoriesFor: #progID!displaying!public! !
 
@@ -58,13 +46,9 @@ fromProgID: aString
 fromString: aString
 	"Answer an instance of the receiver instantiated from the argument, aString."
 
-	| answer |
 	aString isEmpty ifTrue: [^self null].
 	aString first ~~ ${ ifTrue: [^self fromProgID: aString].
-	answer := self newNull.
-	OLELibrary default clsidFromString: aString pclsid: answer.
-	^answer
-!
+	^super fromString: aString!
 
 initialize
 	"Private - Initialize the receiver's class variables.
