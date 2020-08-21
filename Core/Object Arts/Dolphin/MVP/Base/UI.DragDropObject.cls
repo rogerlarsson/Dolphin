@@ -1,0 +1,104 @@
+﻿"Filed out from Dolphin Smalltalk 7"!
+
+Core.Object subclass: #'UI.DragDropObject'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+UI.DragDropObject guid: (Core.GUID fromString: '{87b4c480-026e-11d3-9fd7-00a0cc3e4a32}')!
+UI.DragDropObject isNonInstantiable: true!
+UI.DragDropObject comment: ''!
+!UI.DragDropObject categoriesForClass!MVP-DragDrop! !
+!UI.DragDropObject methodsFor!
+
+availableFormats
+	"Answer an ordered collection of strings identifying each of the receiver's available formats."
+
+	^self subclassResponsibility!
+
+format: formatIdentifier 
+	"Answer the receiver's data in the format identified by formatIdentifier. If the requested format is
+	unavailable then signals an error."
+
+	^self format: formatIdentifier
+		ifAbsent: [self error: 'Requested format is not available: ' , formatIdentifier printString]!
+
+format: formatIdentifier data: formattedDataObject 
+	"Set the receiver's format data for the format identified by formatIdentifier to formattedDataObject."
+
+	^self subclassResponsibility!
+
+format: formatIdentifier ifAbsent: aNiladicValuable 
+	"Answer the receiver's data in the format identified by formatIdentifier. If the requested format is
+	unavailable then evaluate aNiladicValuable."
+
+	^self subclassResponsibility!
+
+isFormatAvailable: formatIdentifier
+	"Answer whether the receiver can render itself in the format identified by formatIdentifier."
+
+	^self subclassResponsibility!
+
+isObjectAvailable
+	"Answer whether the receiver has #Object amongst its available formats."
+
+	^self isFormatAvailable: #Object!
+
+isObjectKindAvailable: aClass
+	"Answer whether the receiver has #Object amongst its available formats
+	and that the object is a kind of aClass."
+
+	^self isObjectAvailable and: [self object isKindOf: aClass]!
+
+object
+	"Answer the receiver's data in #Object format. If #Object is unavailable then signal an error."
+
+	^self format: #Object!
+
+object: anObject
+	"Add to the receiver an 'object' format of a native Smalltalk object."
+
+	self format: #Object data: anObject!
+
+objectIfAbsent: aNiladicValuable
+	"Answer the receiver's 'object' format or evaluate aNiladicValuable if it is not supported."
+
+	^self format: #Object ifAbsent: aNiladicValuable!
+
+printOn: aStream 
+	"Append a textual representation of the receiver to aStream."
+
+	aStream
+		basicPrint: self;
+		nextPut: $(;
+		print: self object;
+		nextPut: $)! !
+!UI.DragDropObject categoriesFor: #availableFormats!accessing!public! !
+!UI.DragDropObject categoriesFor: #format:!accessing!public! !
+!UI.DragDropObject categoriesFor: #format:data:!accessing!public!testing! !
+!UI.DragDropObject categoriesFor: #format:ifAbsent:!accessing!public! !
+!UI.DragDropObject categoriesFor: #isFormatAvailable:!public!testing! !
+!UI.DragDropObject categoriesFor: #isObjectAvailable!public!testing! !
+!UI.DragDropObject categoriesFor: #isObjectKindAvailable:!public!testing! !
+!UI.DragDropObject categoriesFor: #object!accessing!public! !
+!UI.DragDropObject categoriesFor: #object:!accessing!public! !
+!UI.DragDropObject categoriesFor: #objectIfAbsent:!accessing!public! !
+!UI.DragDropObject categoriesFor: #printOn:!printing!public! !
+
+!UI.DragDropObject class methodsFor!
+
+new
+	"Answer a new instance of the receiver."
+
+	^super new initialize!
+
+object: anObject
+	"Answer a new instance of the receiver initialized with anObject in 'object' format."
+
+	^self new
+		object: anObject;
+		yourself! !
+!UI.DragDropObject class categoriesFor: #new!instance creation!public! !
+!UI.DragDropObject class categoriesFor: #object:!instance creation!public! !
+

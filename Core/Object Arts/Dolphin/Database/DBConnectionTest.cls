@@ -1,13 +1,13 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-DolphinTest subclass: #DBConnectionTest
-	instanceVariableNames: 'connection'
+DBTest subclass: #DBConnectionTest
+	instanceVariableNames: ''
 	classVariableNames: ''
-	poolDictionaries: 'ODBCConstants ODBCTypes'
+	imports: #(#{Smalltalk.ODBCConstants} #{Smalltalk.ODBCTypes})
 	classInstanceVariableNames: ''
 	classConstants: {}!
-DBConnectionTest guid: (GUID fromString: '{0a84fa8d-f7c4-4bbe-b459-da0409a391b9}')!
-DBConnectionTest isAbstract: true!
+DBConnectionTest guid: (Core.GUID fromString: '{0a84fa8d-f7c4-4bbe-b459-da0409a391b9}')!
+DBConnectionTest isNonInstantiable: true!
 DBConnectionTest comment: 'SUnitBrowser openOnTestCase: self.
 
 If these tests fail make sure that Tests\NWind.mdb is available and NOT write protected.'!
@@ -22,27 +22,17 @@ dbmsFeaturesMap
 
 	^LookupTable new!
 
-employeeNames
-	^#('Davolio' 'Fuller' 'Leverling' 'Peacock' 'Buchanan' 'Suyama' 'King' 'Callahan' 'Dodsworth')!
-
 field: aString fromRow: aDBRow 
 	^aDBRow at: aString!
 
 queryColumns
 	self subclassResponsibility!
 
-setUp
-	connection := self databaseResource newConnection.
-	self skipUnless: [connection notNil]!
-
 shouldRaiseNotSupported: block 
 	self 
 		should: block
 		raise: DBError
 		matching: [:e | e tag errors anySatisfy: [:x | x sqlState = 'IM001']]!
-
-tearDown
-	connection ifNotNil: [:cnxn | cnxn close]!
 
 testAsArray
 	| results array |
@@ -96,17 +86,6 @@ testAsArray
 	array := results asArray.
 	self assert: array size == 1.
 	self assert: (array first at: 'OrderID') = 10248!
-
-testCollect
-	| names rs |
-	rs := connection query: 'select LastName from employees'.
-	2 timesRepeat: 
-			[names := rs collect: [:each | self field: 'LastName' fromRow: each].
-			self assert: (names noDifference: self employeeNames)].
-	rs := connection query: 'select LastName from employees where LastName = ''Bower'''.
-	2 timesRepeat: 
-			[names := rs collect: [:each | (each at: 1) value].
-			self assert: names isEmpty]!
 
 testColumnsQuery
 	| columns |
@@ -214,9 +193,9 @@ testDSNlessConnection
 	| c connStr locator |
 	c := DBConnection new.
 	locator := PackageRelativeFileLocator package: self class owningPackage.
-	connStr := 'DRIVER={Microsoft Access Driver (*.mdb)};DBQ=<1s>'
-				expandMacrosWithArguments: {locator localFileSpecFor: 'Northwind.mdb'. locator basePath}
-				locale: Locale invariant.
+	connStr := 'DRIVER={Microsoft Access Driver (*.mdb)};DBQ=<1s>' 
+				expandMacrosWith: (locator localFileSpecFor: 'Northwind.mdb')
+				with: locator basePath.
 	c connectString: connStr.
 	c open.
 	self assert: (c tables includes: 'Customers').
@@ -231,16 +210,6 @@ testDSNlessConnection
 	c := DBConnection new.
 	c connectString: 'DRIVER={Microsoft Text Driver (*.txt; *.csv)}'!
 
-testIsEmpty
-	| results |
-	results := connection query: 'select count(*) from categories'.
-	self deny: results isEmpty.
-	results := connection 
-				query: 'select CategoryID, CategoryName from categories where CategoryID is Null'.
-	self assert: results isEmpty.
-	results := connection query: 'select CategoryID, CategoryName from categories where CategoryID = 1'.
-	self deny: results isEmpty!
-
 testPackagesCorrectlySetUp
 	"The base package should not be dependent upon the development system."
 	self assert: ((Package manager packageNamed: 'Database Connection Base') prerequisites allSatisfy: [:each | each name = 'Dolphin' or: [each name = 'Dolphin Legacy Date & Time']])!
@@ -248,7 +217,7 @@ testPackagesCorrectlySetUp
 testPreparedQuery
 	| statement results |
 	statement := connection prepare: 'select * from Suppliers where SupplierID=?'.
-	statement paramCols: {(connection columns: 'Suppliers') at: 1}.
+	statement paramCols: (Array with: ((connection columns: 'Suppliers') at: 1)).
 	statement values: #(3).
 	statement exec.
 	results := statement results.
@@ -285,21 +254,16 @@ testTracing
 ! !
 !DBConnectionTest categoriesFor: #databaseResource!public! !
 !DBConnectionTest categoriesFor: #dbmsFeaturesMap!constants!private! !
-!DBConnectionTest categoriesFor: #employeeNames!private!unit tests! !
 !DBConnectionTest categoriesFor: #field:fromRow:!private!unit tests! !
 !DBConnectionTest categoriesFor: #queryColumns!private! !
-!DBConnectionTest categoriesFor: #setUp!public! !
 !DBConnectionTest categoriesFor: #shouldRaiseNotSupported:!helpers!public! !
-!DBConnectionTest categoriesFor: #tearDown!public!Running! !
 !DBConnectionTest categoriesFor: #testAsArray!public!unit tests! !
-!DBConnectionTest categoriesFor: #testCollect!public!unit tests! !
 !DBConnectionTest categoriesFor: #testColumnsQuery!public!unit tests! !
 !DBConnectionTest categoriesFor: #testConnectionAttributes!public!unit tests! !
 !DBConnectionTest categoriesFor: #testConnectionEnquiries!public!unit tests! !
 !DBConnectionTest categoriesFor: #testConnectionString!public!unit tests! !
 !DBConnectionTest categoriesFor: #testConnectStringDo!public!unit tests! !
 !DBConnectionTest categoriesFor: #testDSNlessConnection!public!unit tests! !
-!DBConnectionTest categoriesFor: #testIsEmpty!public!unit tests! !
 !DBConnectionTest categoriesFor: #testPackagesCorrectlySetUp!public!unit tests! !
 !DBConnectionTest categoriesFor: #testPreparedQuery!public!unit tests! !
 !DBConnectionTest categoriesFor: #testSpecialColumnsQuery!public!unit tests! !

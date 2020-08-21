@@ -57,7 +57,7 @@ RuntimeSessionManager subclass: #FileSystemMonitorSessionManager
 !FileSystemChangeReader class methodsFor!
 
 icon
-	^FileSystemMonitor icon! !
+	^Smalltalk.FileSystemMonitor icon! !
 !FileSystemChangeReader class categoriesFor: #icon!initializing!public! !
 
 "End of package definition"!
