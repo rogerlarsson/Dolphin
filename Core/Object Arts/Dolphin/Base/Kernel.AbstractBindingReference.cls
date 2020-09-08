@@ -269,7 +269,7 @@ undeclare
 			[(self home resolveBindingPath: nsPath)
 				ifNil: [^self]
 				ifNotNil: [:nsBinding | ns := nsBinding targetVariable value]].
-	^ns removeKey: p last!
+	^ns removeLocalBindingFor: p last!
 
 unqualifiedName
 	"Answer the unqualified name part of the receiver (the final component of the name)."

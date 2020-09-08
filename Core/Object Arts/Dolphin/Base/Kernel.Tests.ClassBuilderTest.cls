@@ -1,7 +1,7 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
 Core.Tests.DolphinTest subclass: #'Kernel.Tests.ClassBuilderTest'
-	instanceVariableNames: 'wasOAD'
+	instanceVariableNames: 'wasOAD dirtiedClasses'
 	classVariableNames: ''
 	imports: #()
 	classInstanceVariableNames: ''
@@ -31,17 +31,15 @@ classBuilderTestSubclass1
 classBuilderTestSubclass2
 	^ClassBuilderTestClasses current testSubclass2!
 
-makeCleanClasses
-	ClassBuilderTestClasses isAvailable
-		ifTrue: [ClassBuilderTestClasses current createClasses]!
-
 setUp
+	dirtiedClasses := false.
 	wasOAD := Smalltalk developmentSystem isOAD.
 	Smalltalk developmentSystem isOAD: false!
 
 tearDown
 	"make sure we're up to date here"
 
+	dirtiedClasses ifTrue: [ClassBuilderTestClasses current makeCleanClasses].
 	Smalltalk developmentSystem isOAD: wasOAD.
 	^super tearDown!
 
@@ -72,10 +70,9 @@ testAddClassInstVars
 			self assert: (each instanceClass instVarAt: offset + 3) equals: offset + 1]!
 
 testAddRemoveImports
-	self makeCleanClasses.
 	self assert: self classBuilderTestSubclass1 allImports
 		equals: (#(#ClassBuilderTestPool2 #ClassBuilderTestPool1)
-				collect: [:each | each asQualifiedReference]) , Object imports.
+				collect: [:each | each asQualifiedReference binding fullyQualifiedReference]) , Object imports.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar1') value
 		equals: 'ClassBuilderTestPool2.PoolVar1'.
 	"PoolVar1 is defined in local pool, TestPool2, but also in inherited pool, TestPool1"
@@ -95,10 +92,11 @@ testAddRemoveImports
 		imports: #(#{ClassBuilderTestPool1} #{ClassBuilderTestPool2})
 		classInstanceVariableNames: ''
 		classConstants: {}.
+	dirtiedClasses := true.
 	"Names remain the same, but in reverse order because we added previously inherited pool first"
 	self assert: self classBuilderTestSubclass1 allImports
 		equals: (#(#ClassBuilderTestPool1 #ClassBuilderTestPool2)
-				collect: [:each | each asQualifiedReference]) , Object imports.
+				collect: [:each | each asQualifiedReference binding fullyQualifiedReference]) , Object imports.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar1') value
 		equals: 'ClassBuilderTestPool1.PoolVar1'.
 	"Because we have added TestPool1 before TestPool2, we will now bind to PoolVar1 from there."
@@ -116,9 +114,8 @@ testAddRemoveImports
 		classInstanceVariableNames: ''
 		classConstants: {}.
 	self assert: self classBuilderTestSubclass1 allImports
-		equals: {#ClassBuilderTestPool2 asQualifiedReference.
-				#ClassBuilderTestPool3 asQualifiedReference.
-				#ClassBuilderTestPool1 asQualifiedReference} , Object imports.
+		equals: (#(#ClassBuilderTestPool2 #ClassBuilderTestPool3 #ClassBuilderTestPool1)
+				collect: [:each | each asQualifiedReference binding fullyQualifiedReference]) , Object imports.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar1') value
 		equals: 'ClassBuilderTestPool2.PoolVar1'.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar2') value
@@ -136,14 +133,15 @@ testAddRemoveImports
 		classInstanceVariableNames: ''
 		classConstants: {}.
 	self assert: self classBuilderTestSubclass1 allImports
-		equals: {#ClassBuilderTestPool1 asQualifiedReference} , Object imports.
+		equals: {#ClassBuilderTestPool1 asQualifiedReference binding fullyQualifiedReference} , Object imports.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar1') value
 		equals: 'ClassBuilderTestPool1.PoolVar1'.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar2') value
 		equals: 'ClassBuilderTestPool1.PoolVar2'.
 	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar3') value
 		equals: 'ClassBuilderTestPool1.PoolVar3'.
-	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar4') equals: nil!
+	self assert: (self classBuilderTestSubclass1 fullBindingFor: 'PoolVar4') equals: nil.
+	dirtiedClasses := true.!
 
 testBuildAnonymous
 	| anon base instance |
@@ -193,7 +191,8 @@ testMoveClassToSuperclassWithInstVars
 	newClass := self classBuilderTestSubclass1.
 	self assert: newClass superclass identicalTo: Object.
 	self assert: newClass instVarNames equals: #('var3' 'var4').
-	self assert: newClass instSize equals: 2!
+	self assert: newClass instSize equals: 2.
+	dirtiedClasses := true.!
 
 testMoveClassToSuperclassWithNoInstVars
 	| newClass |
@@ -206,12 +205,13 @@ testMoveClassToSuperclassWithNoInstVars
 	newClass := self classBuilderTestSubclass1.
 	self assert: newClass superclass identicalTo: Object.
 	self assert: newClass instVarNames equals: #().
-	self assert: newClass instSize equals: 0!
+	self assert: newClass instSize equals: 0.
+	dirtiedClasses := true.
+!
 
 testMoveVariable
 	"test moving an iVar up, sideways and down"
 
-	self makeCleanClasses.
 	self assert: self classBuilderTestClass instVarNames equals: #('var1' 'var2').
 	self assert: self classBuilderTestSubclass1 instVarNames equals: #('var3' 'var4').
 	self assert: self classBuilderTestSubclass2 instVarNames equals: #('var3' 'var4').
@@ -222,12 +222,14 @@ testMoveVariable
 		imports: #().
 	self assert: self classBuilderTestClass instVarNames equals: #('var1' 'testVar' 'var2').
 	self assert: self classBuilderTestSubclass1 instVarNames equals: #('var3' 'var4').
-	self assert: self classBuilderTestSubclass2 instVarNames equals: #('var3' 'var4')!
+	self assert: self classBuilderTestSubclass2 instVarNames equals: #('var3' 'var4').
+	dirtiedClasses := true.
+
+!
 
 testPoolVariablePrecedence
 	"Base class has only pool1"
 
-	self makeCleanClasses.
 	self assert: self classBuilderTestClass allSharedPoolNames
 		equals: #(#ClassBuilderTestPool1) , Object sharedPoolNames.
 	self assert: (self classBuilderTestClass fullBindingFor: 'PoolVar1') value
@@ -293,7 +295,8 @@ testReparentSubClassWithSameAllInstVars
 	self assert: (testInstance instVarAt: 1) equals: 42.
 	self assert: (testInstance instVarAt: 2) equals: 'hello'.
 	self assert: (testInstance instVarAt: 3) equals: 'foo'.
-	self assert: (testInstance instVarAt: 4) equals: #bar!
+	self assert: (testInstance instVarAt: 4) equals: #bar.
+	dirtiedClasses := true.!
 
 testReshapeClass
 	"see if reshaping classes works"
@@ -328,7 +331,8 @@ testReshapeClass
 	self assert: testClass identicalTo: newClass.
 	"Issue: Dolphin's ClassBuilder fails here because it does not become over the metaclasses, only the classes."
 	(self runKnownBug: 'ClassBuilder does not "become" metaclass' test: #testReshapeClass)
-		ifTrue: [self assert: testMeta identicalTo: newMeta]!
+		ifTrue: [self assert: testMeta identicalTo: newMeta].
+	dirtiedClasses := true.!
 
 testReshapeClassWithJugglingInstVars
 	"see if reshapes of classes juggle their instVars correctly"
@@ -361,13 +365,14 @@ testReshapeClassWithJugglingInstVars
 	self assert: testClass identicalTo: newClass.
 	"Dolphin's class builder fails because it does not become over the metaclasses."
 	(self runKnownBug: 'ClassBuilder does not "become" metaclass'
-		test: #testReshapeClassWithJugglingInstVars) ifTrue: [self assert: testMeta identicalTo: newMeta]!
+		test: #testReshapeClassWithJugglingInstVars) ifTrue: [self assert: testMeta identicalTo: newMeta].
+	dirtiedClasses := true.
+!
 
 testReshapeSubClass
 	"see if reshaping a class updates the instances of its subclass correctly"
 
 	| testInstance testClass testMeta |
-	self makeCleanClasses.
 	testClass := self classBuilderTestSubclass1.
 	testMeta := testClass class.
 	testInstance := testClass new.
@@ -381,7 +386,6 @@ testReshapeSubClass
 		classVariableNames: ''
 		poolDictionaries: ''
 		category: 'Tests-Kernel-Classes'.
-
 	"test transparency of mapping"
 	self assert: testInstance var1 equals: 42.
 	self assert: testInstance var2 equals: 'hello'.
@@ -400,11 +404,12 @@ testReshapeSubClass
 	self assert: testClass identicalTo: self classBuilderTestSubclass1.
 	"Dolphin's class builder fails because it does not become over the metaclasses."
 	(self runKnownBug: 'ClassBuilder does not "become" metaclass' test: #testReshapeSubClass)
-		ifTrue: [self assert: testMeta identicalTo: self classBuilderTestSubclass1 class]! !
+		ifTrue: [self assert: testMeta identicalTo: self classBuilderTestSubclass1 class].
+	dirtiedClasses := true.
+! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #classBuilderTestClass!public!unit tests! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #classBuilderTestSubclass1!public!unit tests! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #classBuilderTestSubclass2!public!unit tests! !
-!Kernel.Tests.ClassBuilderTest categoriesFor: #makeCleanClasses!private!Running! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #setUp!public!Running! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #tearDown!public!Running! !
 !Kernel.Tests.ClassBuilderTest categoriesFor: #testAddClassInstVars!public!unit tests! !
