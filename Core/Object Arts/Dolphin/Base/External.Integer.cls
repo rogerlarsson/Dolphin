@@ -90,15 +90,8 @@ defineTemplate
 fromInteger: anInteger
 	"Answer a new instance of the receiver with contents copied from anInteger"
 
-	^self new value: anInteger!
-
-newInstanceAspect: aSymbol class: aspectClass 
-	"Private - Answer a new <Aspect> of the class, aspectClass, and with name, aSymbol, 
-    	which is appropriate for representing aspects of the receiver's type."
-
-	^aspectClass integer: aSymbol! !
+	^self new value: anInteger! !
 !External.Integer class categoriesFor: #decompileDefinition!public! !
 !External.Integer class categoriesFor: #defineTemplate!public!template definition! !
 !External.Integer class categoriesFor: #fromInteger:!instance creation!public! !
-!External.Integer class categoriesFor: #newInstanceAspect:class:!adapters!private! !
 

@@ -21,12 +21,12 @@ testPrintOn
 				in: Refactory.Browser.AddMethodChangeTest class
 				classified: 'testing'.
 	self assert: change printString readStream nextLine
-		equals: '!!AddMethodChangeTest class methodsFor: ''testing''!!'.
+		equals: '!!Refactory.Browser.AddMethodChangeTest class methodsFor: ''testing''!!'.
 	#'1593'.
 	change protocols: #().
 	self assertIsNil: change protocol.
 	self assert: change printString readStream nextLine
-		equals: '!!AddMethodChangeTest class methodsFor: ''''!!'! !
+		equals: '!!Refactory.Browser.AddMethodChangeTest class methodsFor: ''''!!'! !
 !Refactory.Browser.AddMethodChangeTest categoriesFor: #changeClass!public!unit tests! !
 !Refactory.Browser.AddMethodChangeTest categoriesFor: #testPrintOn!public!unit tests! !
 

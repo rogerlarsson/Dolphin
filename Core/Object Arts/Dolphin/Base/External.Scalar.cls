@@ -44,11 +44,7 @@ defineFields
 	self defineField: #value type: (FillerField byteSize: 0)!
 
 getFieldNames
-	^#(#value)!
-
-shouldOverrideGetFieldNames
-	^false! !
+	^#(#value)! !
 !External.Scalar class categoriesFor: #defineFields!public!template definition! !
 !External.Scalar class categoriesFor: #getFieldNames!constants!private! !
-!External.Scalar class categoriesFor: #shouldOverrideGetFieldNames!compiling!private! !
 

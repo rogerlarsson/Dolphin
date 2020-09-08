@@ -3632,12 +3632,6 @@ Core.SessionManager subclass: #'Kernel.BootSessionManager'
 	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-Core.SessionManager subclass: #'Kernel.ConsoleSessionManager'
-	instanceVariableNames: ''
-	classVariableNames: ''
-	imports: #(#{OS.CRTConstants})
-	classInstanceVariableNames: ''
-	classConstants: {}!
 Core.Signal subclass: #'Core.NotificationSignal'
 	instanceVariableNames: ''
 	classVariableNames: ''

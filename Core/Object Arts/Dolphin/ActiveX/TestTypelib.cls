@@ -3,7 +3,7 @@
 XProgramming.SUnit.TestResource subclass: #TestTypelib
 	instanceVariableNames: 'analyzer'
 	classVariableNames: ''
-	imports: #(#{OS.Win32Constants} #{OS.NlsConstants})
+	imports: #(#{OS.Win32Constants})
 	classInstanceVariableNames: ''
 	classConstants: {}!
 TestTypelib guid: (Core.GUID fromString: '{bda93d8c-df4b-4461-8950-9db6e8797384}')!
@@ -19,11 +19,14 @@ libid
 
 setUp
 	super setUp.
-	analyzer := [AXTypeLibraryAnalyzer 
+	
+	[analyzer := AXTypeLibraryAnalyzer
 				load: self libid
 				major: 1
 				minor: 0
-				locale: LOCALE_USER_DEFAULT] on: HRESULTError do: [:ex | ex return: nil]!
+				locale: NlsConstants.LOCALE_USER_DEFAULT]
+			on: HRESULTError
+			do: [:ex | ex hresult asInteger = AXAutomationErrors.TYPE_E_LIBNOTREGISTERED ifFalse: [ex pass]]!
 
 tearDown
 	analyzer notNil 

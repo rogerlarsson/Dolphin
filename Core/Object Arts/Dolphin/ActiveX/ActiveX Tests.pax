@@ -8,7 +8,9 @@ package setClassNames: #(
 	#{Smalltalk.ADODBTest}
 	#{Smalltalk.AXEventSinkTest}
 	#{Smalltalk.AXTypeLibraryAnalyzerTest}
+	#{Smalltalk.CLSIDTest}
 	#{Smalltalk.COMInterfaceTest}
+	#{Smalltalk.IIDTest}
 	#{Smalltalk.TestTypelib}
 	#{Smalltalk.XmlFormatterTest}
 ).
@@ -61,10 +63,22 @@ DBTest subclass: #ADODBTest
 	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
+External.Tests.GUIDTest subclass: #CLSIDTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+External.Tests.GUIDTest subclass: #IIDTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
 XProgramming.SUnit.TestResource subclass: #TestTypelib
 	instanceVariableNames: 'analyzer'
 	classVariableNames: ''
-	imports: #(#{OS.Win32Constants} #{OS.NlsConstants})
+	imports: #(#{OS.Win32Constants})
 	classInstanceVariableNames: ''
 	classConstants: {}!
 
