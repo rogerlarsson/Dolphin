@@ -2810,6 +2810,44 @@ testQwordAtOffset
 	self assert: actual byteSize equals: 12.
 	self assert: actual equals: 16rFFFFFFFFFFFFFFFF!
 
+testRegistry
+	| interruptHotKey nonClasses imageVersionMinor imageVersionMajor |
+	interruptHotKey := Smalltalk developmentSystem interruptHotKey.
+	self assert: interruptHotKey isInteger.
+	imageVersionMinor := SessionManager current imageVersionMinor.
+	self assert: imageVersionMinor isInteger.
+	imageVersionMajor := SessionManager current imageVersionMajor.
+	self assert: imageVersionMajor isInteger.
+	nonClasses := Dictionary withAll: {#DolphinHandle -> (KernelLibrary default getModuleHandle: nil).
+						#Corpse -> DeadObject current.
+						#interruptHotKey -> interruptHotKey.
+						#BereavementSemaphore -> (MemoryManager current instVarNamed: 'bereavements').
+						#FinalizeSemaphore -> (MemoryManager current instVarNamed: 'lastRequests').
+						#TimingSemaphore -> Delay.TimingSemaphore.
+						#WakeupEvent -> (SessionManager inputState instVarNamed: 'wakeupEvent').
+						#ImageVersionMinor -> imageVersionMinor.
+						#ImageVersionMajor -> imageVersionMajor.
+						#KernelHandle -> KernelLibrary default handle.
+						#CRTHandle -> CRTLibrary default handle.
+						#Dispatcher -> SessionManager inputState.
+						#VMHandle -> VMLibrary default handle.
+						#arithmeticSelectors -> #+.
+						#commonSelectors -> #==.
+						#BereavementQueue -> (MemoryManager current instVarNamed: 'bereaved').
+						#InputSemaphore -> SessionManager inputState inputSemaphore.
+						#MsgWndHandle -> SessionManager inputState msgWindow asParameter.
+						#memoryManager -> MemoryManager current.
+						#ArrayBinding -> (Core bindingFor: #Array).
+						#FinalizeQueue -> (MemoryManager current instVarNamed: 'hospice')}.
+	VMLibrary.RegistryKeys keysAndValuesDo: 
+			[:name :each |
+			| actual expected |
+			actual := VMLibrary.Registry at: each.
+			expected := nonClasses at: name ifAbsent: [name asQualifiedReference value].
+			expected class isMeta
+				ifTrue: [self assert: actual identicalTo: expected]
+				ifFalse: [self assert: actual equals: expected]]!
+
 testSignedFromUnsigned
 	"Test SmallIntegers and 4 & 8 byte LargeIntegers"
 
@@ -3562,6 +3600,7 @@ verifyPrimitiveNextPutAllOnUtfStrings: method
 !Kernel.Tests.VMTest categoriesFor: #testPrimitiveSubtract!public!unit tests! !
 !Kernel.Tests.VMTest categoriesFor: #testPrimitiveYourAddress!public!unit tests! !
 !Kernel.Tests.VMTest categoriesFor: #testQwordAtOffset!public!unit tests! !
+!Kernel.Tests.VMTest categoriesFor: #testRegistry!public!unit tests! !
 !Kernel.Tests.VMTest categoriesFor: #testSignedFromUnsigned!public!unit tests! !
 !Kernel.Tests.VMTest categoriesFor: #testSqwordAtOffset!public!unit tests! !
 !Kernel.Tests.VMTest categoriesFor: #testVMPointersImmutable!public!unit tests! !
