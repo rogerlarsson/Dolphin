@@ -275,10 +275,7 @@ numberClasses
 	^self classNames size!
 
 numberSelectors
-	| total |
-	total := 0.
-	Smalltalk allBehaviorsDo: [:class | total := total + class numberSelectors].
-	^total!
+	^Smalltalk allClasses inject: 0 into: [:sum :class | sum + class numberSelectors + class class numberSelectors]!
 
 printOn: aStream
 	aStream nextPutAll: self label!
