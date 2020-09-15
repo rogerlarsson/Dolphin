@@ -175,8 +175,7 @@ createProper
 		superclass: metaSuperclass.
 	(currentClass := newMetaclass new)
 		instanceSpec: instanceSpec;
-		environment: self environment;
-		setName: className;
+		setName: className environment: self environment;
 		superclass: superclass;
 		subclasses: #().
 

@@ -450,10 +450,7 @@ fullName
 	"Answer the <String> fully qualified name of the receiver, which is a dot-separated path that binds to the receiver from the global namespace, Root.
 	Note that these names will also be bindable within the legacy Smalltalk namespace, because it is itself an immediate child of root, and so any of its siblings is bindable using that sibling's unqualified name."
 
-	| stream |
-	stream := WriteStream on: (Utf8String new: 32).
-	self printFullNameOn: stream.
-	^stream contents!
+	^self subclassResponsibility!
 
 fullyQualifiedReference
 	"Answer a <BindingReference> that represents a fully qualified reference to the receiver relative to Smalltalk. If the Class is not in the hierarchy below Smalltalk (i.e. it is in Root, or another namespace hierarchy under Root), then it will be an absolute binding reference."
