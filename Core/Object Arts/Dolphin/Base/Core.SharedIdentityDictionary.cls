@@ -11,15 +11,15 @@ Core.SharedIdentityDictionary comment: ''!
 !Core.SharedIdentityDictionary categoriesForClass!Collections-Unordered! !
 !Core.SharedIdentityDictionary methodsFor!
 
-findKeyOrNil: anObject 
+findKeyOrNil: anObject
 	"Private - This method is a copy of IdentityDictionary>>findKeyOrNil:"
 
 	| capacity index |
 	capacity := self basicSize.
-	index := self hash: anObject max: capacity.
+	index := anObject identityHash \\ capacity + 1.
 	
 	[| key |
-	(key := self basicAt: index) isNil or: [key == anObject]] 
+	(key := self basicAt: index) isNil or: [key == anObject]]
 			whileFalse: [index := index \\ capacity + 1].
 	^index!
 
