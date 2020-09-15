@@ -11,15 +11,15 @@ Core.WeakIdentitySet comment: ''!
 !Core.WeakIdentitySet categoriesForClass!Collections-Unordered!Collections-Weak! !
 !Core.WeakIdentitySet methodsFor!
 
-findElementOrNil: anObject 
+findElementOrNil: anObject
 	"Private - This method is a copy of IdentitySet>>findElementOrNil:"
 
 	| capacity index |
 	capacity := self basicSize.
-	index := self hash: anObject max: capacity.
+	index := anObject identityHash \\ capacity + 1.
 	
 	[| element |
-	(element := self basicAt: index) isNil or: [anObject == element]] 
+	(element := self basicAt: index) isNil or: [anObject == element]]
 			whileFalse: [index := index \\ capacity + 1].
 	^index!
 

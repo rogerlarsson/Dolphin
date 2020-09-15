@@ -207,7 +207,7 @@ find: target ifAbsent: exceptionHandler
 
 	^(self basicAt: (self findElementOrNil: target)) ifNil: [exceptionHandler value]!
 
-findElementOrNil: anObject 
+findElementOrNil: anObject
 	"Private - Answer the index of the given object in the receiver, or, if not found,
 	the index of the first empty slot including and after that to which the object hashes.
 	Implementation Note: This implementation is tuned to give the best performance on the
@@ -217,10 +217,10 @@ findElementOrNil: anObject
 
 	| capacity index |
 	capacity := self basicSize.
-	index := self hash: anObject max: capacity.
+	index := anObject hash \\ capacity + 1.
 	
 	[| element |
-	(element := self basicAt: index) isNil or: [anObject = element]] 
+	(element := self basicAt: index) isNil or: [anObject = element]]
 			whileFalse: [index := index \\ capacity + 1].
 	^index!
 
