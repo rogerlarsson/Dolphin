@@ -99,6 +99,12 @@ package!
 
 "Class Definitions"!
 
+UI subclass: #'UI.Scintilla'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
 Kernel.SharedPool subclass: #'UI.Scintilla.ScintillaConstants'
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -1370,12 +1376,6 @@ Kernel.SharedPool subclass: #'UI.Scintilla.ScintillaConstants'
 		'VISIBLE_SLOP' -> 16r1.
 		'VISIBLE_STRICT' -> 16r4
 	}!
-UI subclass: #'UI.Scintilla'
-	instanceVariableNames: ''
-	classVariableNames: ''
-	imports: #()
-	classInstanceVariableNames: ''
-	classConstants: {}!
 Core.Object subclass: #'UI.Scintilla.Annotation'
 	instanceVariableNames: 'line text styles'
 	classVariableNames: ''
