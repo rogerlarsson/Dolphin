@@ -66,7 +66,7 @@ testAfter
 	self
 		should: [(self assimilateString: 'ab') after: $b]
 		raise: Error
-		matching: [:ex | ex description equals: '$b is my last object'].
+		matching: [:ex | ex description = '$b is my last object'].
 	self should: [self collectionClass empty after: $a] raise: NotFoundError.
 	self should: [(self assimilateString: 'a') after: $b] raise: NotFoundError!
 
@@ -95,7 +95,7 @@ testBefore
 	self
 		should: [(self assimilateString: 'ab') before: $a]
 		raise: Error
-		matching: [:ex | ex description equals: '$a is my first object'].
+		matching: [:ex | ex description = '$a is my first object'].
 	self should: [self collectionClass empty before: $a] raise: NotFoundError.
 	self should: [(self assimilateString: 'a') before: $b] raise: NotFoundError!
 
