@@ -1,6 +1,6 @@
 ﻿| package |
 package := Package name: 'Chat'.
-package paxVersion: 2;
+package paxVersion: 2.1;
 	preDeclareClassesOnLoad: false;
 	basicComment: 'Dolphin Smalltalk Chat Sample. 
 Copyright (c) Object Arts Ltd, 1998-2000.
@@ -19,7 +19,7 @@ If you only have one machine (but with TCP/IP installed) you can still use the d
 
 
 package setClassNames: #(
-	#{Chat}
+	#{Smalltalk.Chat}
 ).
 
 package setPrerequisites: #(
@@ -40,10 +40,10 @@ package!
 
 "Class Definitions"!
 
-Presenter subclass: #Chat
-	instanceVariableNames: 'calleeAddress outgoingMessage messageDisplay status socket acceptSocket sendQueue'
+UI.Presenter subclass: #Chat
+	instanceVariableNames: 'calleeAddress outgoingMessage messageDisplay status socket acceptSocket sendQueue outgoingPort incomingPort'
 	classVariableNames: 'Statii'
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
 
