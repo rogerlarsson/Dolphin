@@ -1,12 +1,12 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-Presenter subclass: #Chat
-	instanceVariableNames: 'calleeAddress outgoingMessage messageDisplay status socket acceptSocket sendQueue'
+UI.Presenter subclass: #Chat
+	instanceVariableNames: 'calleeAddress outgoingMessage messageDisplay status socket acceptSocket sendQueue outgoingPort incomingPort'
 	classVariableNames: 'Statii'
-	poolDictionaries: ''
+	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-Chat guid: (GUID fromString: '{87b4c699-026e-11d3-9fd7-00a0cc3e4a32}')!
+Chat guid: (Core.GUID fromString: '{87b4c699-026e-11d3-9fd7-00a0cc3e4a32}')!
 Chat comment: 'Chat is a <compositePresenter> implementing a simple "chat" service for the purpose of demonstrating the use of the new blocking Dolphin Sockets API. It has a multi-threaded design that would be appropriate for more complex socket client/server applications too. Finally Chat illustrates the use of STB-based messaging, which provides for a simple and efficient way to transmit and receive objects over a socket connection. An instance can be opened on any machine running TCP/IP using:
 
 	Chat show.
@@ -37,7 +37,7 @@ acceptCalls
 	"Private - Monitor the port for a connection request. If the port is already in use then we'll
 	receive an error and can display an 'Unable to receive calls' status message."
 
-	acceptSocket := [ServerSocket2 port: self defaultPort backlog: 0] on: SocketError
+	acceptSocket := [ServerSocket2 port: self incomingPort backlog: 0] on: SocketError
 				do: [:ex | nil].
 	self setAcceptStatus.
 	acceptSocket isNil ifFalse: [self forkAccepter]!
@@ -69,6 +69,7 @@ canConnect
 	addr isNil ifTrue: [^false].
 	"If can't accept connections, then cannot connect to self"
 	acceptSocket isNil ifTrue: [^true].
+	self incomingPort = self outgoingPort ifFalse: [^true].
 	"Check not attempting to connect to self..."
 	localHost := InternetAddress localHost.
 	^({localHost displayString asLowercase. localHost ipString. '127.0.0.1'. 'localhost'}
@@ -95,7 +96,7 @@ connect
 	until some response is received from the connection request."
 
 	| sock |
-	sock := Socket2 port: self defaultPort address: self calleeAddress.
+	sock := Socket2 port: self outgoingPort address: self calleeAddress.
 	self status: #connecting.
 	self invalidateUserInterface.
 	self forkConnector: sock!
@@ -111,7 +112,7 @@ createComponents
 	super createComponents.
 	calleeAddress := self add: TextPresenter new name: 'calleeAddress'.
 	outgoingMessage := self add: TextPresenter new name: 'outgoingMessage'.
-	status := #initializing asValue.!
+	status := #initializing asValue!
 
 createSchematicWiring
 	"Create the trigger wiring for the receiver"
@@ -225,6 +226,12 @@ forkSender
 	[self senderMain.
 	self enqueueDisconnect] fork!
 
+incomingPort
+	^incomingPort ?? self defaultPort!
+
+incomingPort: anInteger
+	incomingPort := anInteger!
+
 isBusy
 	^#(#initializing #connecting) includes: self status!
 
@@ -273,6 +280,12 @@ onViewOpened
 				typeConverter: (MappingConverter leftToRight: Statii)).
 	self acceptCalls!
 
+outgoingPort
+	^outgoingPort ?? self defaultPort!
+
+outgoingPort: anInteger
+	outgoingPort := anInteger!
+
 peerAddress
 	^socket peerAddress displayString!
 
@@ -299,9 +312,9 @@ receiveMessagesOn: aStream
 
 	
 	[| filer validClasses |
-	validClasses := #(#Association #String).
+	validClasses := Set withAll: { Association fullName. AnsiString fullName. Utf8String fullName. Utf16String fullName }.
 	filer := (STBValidatingInFiler on: aStream)
-				validationBlock: [:className | validClasses identityIncludes: className];
+				validationBlock: [:className | validClasses includes: className];
 				yourself.
 	
 	[| message |
@@ -414,6 +427,8 @@ validateUserInterface
 !Chat categoriesFor: #forkConnector:!operations!private! !
 !Chat categoriesFor: #forkReceiverOn:!private! !
 !Chat categoriesFor: #forkSender!helpers!private! !
+!Chat categoriesFor: #incomingPort!accessing!public! !
+!Chat categoriesFor: #incomingPort:!accessing!public! !
 !Chat categoriesFor: #isBusy!event handling!public! !
 !Chat categoriesFor: #isConnected!public!testing! !
 !Chat categoriesFor: #isIdle!public!testing! !
@@ -422,6 +437,8 @@ validateUserInterface
 !Chat categoriesFor: #onStartup!event handling!private! !
 !Chat categoriesFor: #onViewClosed!event handling!private! !
 !Chat categoriesFor: #onViewOpened!event handling!private! !
+!Chat categoriesFor: #outgoingPort!accessing!public! !
+!Chat categoriesFor: #outgoingPort:!accessing!public! !
 !Chat categoriesFor: #peerAddress!private! !
 !Chat categoriesFor: #queryCommand:!commands!private! !
 !Chat categoriesFor: #receiveMessagesOn:!private! !
