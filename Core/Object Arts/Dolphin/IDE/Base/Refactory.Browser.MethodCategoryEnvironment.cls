@@ -22,17 +22,18 @@ categories: aCollection
 categoryNames: aCollection
 	categories := aCollection collect: [:each | each asMethodCategory]!
 
-classesAndSelectorsDo: aBlock 
+classesAndSelectorsDo: aBlock
 	categories do: 
-			[:each | 
+			[:each |
 			each behaviorsDo: 
-					[:eachClass | 
-					(super includesClass: eachClass) 
+					[:eachClass |
+					(super includesClass: eachClass)
 						ifTrue: 
-							[(each methodsInBehavior: eachClass) do: 
-									[:eachMethod | 
-									(environment includesSelector: eachMethod selector in: eachMethod methodClass) 
-										ifTrue: [aBlock value: eachMethod methodClass value: eachMethod selector]]]]]!
+							[each methodsInBehavior: eachClass
+								do: 
+									[:eachMethod |
+									(environment includesSelector: eachMethod selector in: eachClass)
+										ifTrue: [aBlock value: eachClass value: eachMethod selector]]]]]!
 
 defaultLabel
 	| stream |
