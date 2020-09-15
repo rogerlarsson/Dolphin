@@ -126,7 +126,12 @@ package setVariableNames: #(
 	#{Smalltalk.CheckedPushButton}
 	#{Smalltalk.CompositePresenter}
 	#{Smalltalk.MultipleChoicePresenter}
+	#{Smalltalk.NullScintillaStyler}
 	#{Smalltalk.ScintillaIndicatorDefinition}
+	#{Smalltalk.ScintillaIndicatorStyle}
+	#{Smalltalk.ScintillaMargin}
+	#{Smalltalk.ScintillaMarkerDefinition}
+	#{Smalltalk.ScintillaTextStyle}
 	#{Smalltalk.ScintillaView}
 	#{Smalltalk.StaticViewAbstract}
 	#{Smalltalk.WinImageList}
@@ -136,7 +141,12 @@ package setAliasVariableNames: #(
 	#{Smalltalk.CheckedPushButton}
 	#{Smalltalk.CompositePresenter}
 	#{Smalltalk.MultipleChoicePresenter}
+	#{Smalltalk.NullScintillaStyler}
 	#{Smalltalk.ScintillaIndicatorDefinition}
+	#{Smalltalk.ScintillaIndicatorStyle}
+	#{Smalltalk.ScintillaMargin}
+	#{Smalltalk.ScintillaMarkerDefinition}
+	#{Smalltalk.ScintillaTextStyle}
 	#{Smalltalk.ScintillaView}
 	#{Smalltalk.StaticViewAbstract}
 	#{Smalltalk.WinImageList}
@@ -196,7 +206,17 @@ Smalltalk.CompositePresenter := UI.Presenter!
 
 Smalltalk.MultipleChoicePresenter := UI.ChoicePresenter!
 
+Smalltalk.NullScintillaStyler := UI.Scintilla.NullStyler!
+
 Smalltalk.ScintillaIndicatorDefinition := UI.Scintilla.IndicatorStyle!
+
+Smalltalk.ScintillaIndicatorStyle := UI.Scintilla.IndicatorStyle!
+
+Smalltalk.ScintillaMargin := UI.Scintilla.Margin!
+
+Smalltalk.ScintillaMarkerDefinition := UI.Scintilla.MarkerDefinition!
+
+Smalltalk.ScintillaTextStyle := UI.Scintilla.TextStyle!
 
 Smalltalk.ScintillaView := UI.Scintilla.ScintillaView!
 

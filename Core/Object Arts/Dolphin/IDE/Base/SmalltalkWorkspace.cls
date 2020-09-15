@@ -1771,7 +1771,7 @@ defaultEditorKeyBindings
 	Note that the defaultAdditionalAccelerators will also supplant any Scintilla commands normally associated with those key bindings."
 
 	^{Scintilla.KeyBinding newChord: 'CTRL+SHIFT+D'
-			message: ScintillaConstants.SCI_SELECTIONDUPLICATE}!
+			message: Scintilla.ScintillaConstants.SCI_SELECTIONDUPLICATE}!
 
 defaultFont
 	"Answer the default  font to use for instances of the receiver"
