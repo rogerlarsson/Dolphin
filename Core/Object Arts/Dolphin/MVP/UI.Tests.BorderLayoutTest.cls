@@ -18,7 +18,7 @@ testResourceBrowserPreview
 	"#1758"
 
 	| resourceId resourceView resources |
-	resourceId := ResourceIdentifier class: Smalltalk.ResourceBrowser name: 'Default view'.
+	resourceId := ResourceIdentifier class: Tools.ResourceBrowser name: 'Default view'.
 	resourceView := 
 			[Smalltalk developmentSystem loadViewResource: resourceId resource inContext: View desktop]
 					on: Error

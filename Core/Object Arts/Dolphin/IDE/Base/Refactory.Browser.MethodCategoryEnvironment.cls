@@ -103,7 +103,7 @@ referencesTo: aLiteral in: anEnvironment
 	literalName := (aLiteral isVariableBinding ifTrue: [aLiteral key] ifFalse: [aLiteral])
 				displayString: Locale smalltalk.
 	label := 'References to: ' , literalName.
-	refs := Smalltalk.ReferencesCategory newNamed: label literal: aLiteral.
+	refs := Tools.ReferencesCategory newNamed: label literal: aLiteral.
 	^(self onEnvironment: anEnvironment categories: {refs})
 		label: label;
 		searchStrings: {literalName};

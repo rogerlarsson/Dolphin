@@ -109,8 +109,8 @@ testSetGetAnnotations
 
 testTokensFromTo
 	| tokens expected styler |
-	presenter textStyles: Smalltalk.SmalltalkWorkspace textStyles.
-	presenter stylerClass: Smalltalk.SmalltalkExpressionStyler.
+	presenter textStyles: Tools.SmalltalkWorkspace textStyles.
+	presenter stylerClass: Tools.SmalltalkExpressionStyler.
 	styler := StStyler new.
 	#('' ' ' ' 	 ' ' a' 'a ' ' a ' ' a #a' 'a #a ' ' a #a ' ' a #a 1.2 '''' ''blah blah'' (') do: 
 			[:text |

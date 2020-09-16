@@ -1,9 +1,9 @@
 ﻿"Filed out from Dolphin Smalltalk 7"!
 
-ExternalStructure subclass: #COMInterface
+External.Structure subclass: #COMInterface
 	instanceVariableNames: 'implementor'
 	classVariableNames: 'InterfaceClasses'
-	poolDictionaries: 'OLEConstants Win32Constants Win32Errors'
+	imports: #(#{Smalltalk.OLEConstants private} #{OS.Win32Constants private} #{OS.Win32Errors private})
 	classInstanceVariableNames: 'argSizes functions typeLib'
 	classConstants: {
 		'_OffsetOf_argSizes' -> 16r4.
@@ -11,8 +11,8 @@ ExternalStructure subclass: #COMInterface
 		'_OffsetOf_objectCookie' -> 16r8.
 		'_OffsetOf_vtbl' -> 16r0
 	}!
-COMInterface guid: (IID fromString: '{87B4C591-026E-11D3-9FD7-00A0CC3E4A32}')!
-COMInterface isAbstract: true!
+COMInterface guid: (IID fromString: '{87b4c591-026e-11d3-9fd7-00a0cc3e4a32}')!
+COMInterface isNonInstantiable: true!
 COMInterface comment: ''!
 !COMInterface categoriesForClass!External-Data-Structured-COM! !
 !COMInterface methodsFor!

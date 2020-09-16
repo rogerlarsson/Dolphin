@@ -390,7 +390,7 @@ getFullName
 	| stream |
 	(name isNil or: [environment isNil or: [environment == Root]]) ifTrue: [^self name].
 	stream := WriteStream on: (Utf8String new: 32).
-	self printFullNameOn: stream.
+	self printNameOn: stream relativeTo: Root.
 	^stream contents!
 
 guid
@@ -601,7 +601,7 @@ printDefinitionOn: aPuttableStream
 printFullNameOn: aPuttableStream
 	name
 		ifNil: [self printOn: aPuttableStream]
-		ifNotNil: [self printNameOn: aPuttableStream relativeTo: Root]!
+		ifNotNil: [aPuttableStream nextPutAll: fullName]!
 
 printNameOn: aPuttableStream relativeTo: outerNamespace
 	(self environment isNil or: [environment == outerNamespace])
