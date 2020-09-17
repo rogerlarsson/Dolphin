@@ -175,7 +175,7 @@ name: categoryName
 
 	| nameString |
 	nameString := categoryName asString.
-	^Table at: nameString ifAbsentPut: [self newNamed: nameString]!
+	^Table at: nameString ifAbsentPutClean: [self newNamed: nameString]!
 
 primitives
 	"Answer the category for primitive methods."

@@ -60,7 +60,7 @@ parent
 
 	| path |
 	^(path := self pathname) isEmpty
-		ifFalse: [self class pathname: (File splitPathFrom: (path first: path size - 1))]!
+		ifFalse: [self class pathname: (File splitPathFrom: (path copyFrom: 1 to: path size - 1))]!
 
 pathname
 	"Answer the folder pathname of the receiver"
