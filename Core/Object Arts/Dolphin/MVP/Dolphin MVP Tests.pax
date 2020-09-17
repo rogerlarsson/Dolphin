@@ -7,6 +7,7 @@ package paxVersion: 2.1;
 
 package setClassNames: #(
 	#{Graphics.Tests.ARGBTest}
+	#{Graphics.Tests.BitmapTest}
 	#{Graphics.Tests.BrushTest}
 	#{Graphics.Tests.CanvasTest}
 	#{Graphics.Tests.ColorTest}
@@ -134,6 +135,12 @@ Core.Tests.DolphinTest subclass: #'UI.Tests.AbstractKeyboardTest'
 	classInstanceVariableNames: ''
 	classConstants: {}!
 Core.Tests.DolphinTest subclass: #'Graphics.Tests.ARGBTest'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+Core.Tests.DolphinTest subclass: #'Graphics.Tests.BitmapTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
 	imports: #()
