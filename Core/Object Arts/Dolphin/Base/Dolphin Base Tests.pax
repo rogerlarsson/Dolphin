@@ -82,15 +82,14 @@ package setClassNames: #(
 	#{External.Tests.DescriptorTest}
 	#{External.Tests.DOUBLEArrayTest}
 	#{External.Tests.DWORDArrayTest}
+	#{External.Tests.DynamicLinkLibraryTest}
 	#{External.Tests.ExternalArrayTest}
 	#{External.Tests.ExternalFieldTest}
 	#{External.Tests.FLOATArrayTest}
 	#{External.Tests.GenericExternalArrayTest}
 	#{External.Tests.GUIDTest}
-	#{External.Tests.LibraryTest}
 	#{External.Tests.ResourceLibraryTest}
 	#{External.Tests.SDWORDArrayTest}
-	#{External.Tests.StdioFileStreamTest}
 	#{External.Tests.StructureArrayTest}
 	#{External.Tests.StructureTest}
 	#{External.Tests.SWORDArrayTest}
@@ -136,6 +135,7 @@ package setClassNames: #(
 	#{OS.Tests.FILETIMETest}
 	#{OS.Tests.HRESULTTest}
 	#{OS.Tests.ShlwapiLibraryTest}
+	#{OS.Tests.StdioFileStreamTest}
 	#{OS.Tests.WindowsLocaleTest}
 	#{Smalltalk.PoolConstantsDictionaryTest}
 ).
@@ -342,6 +342,12 @@ Core.Tests.DolphinTest subclass: #'Core.Tests.DurationTest'
 	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
+Core.Tests.DolphinTest subclass: #'External.Tests.DynamicLinkLibraryTest'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
 Core.Tests.DolphinTest subclass: #'Kernel.Tests.EventMessageSendTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -397,12 +403,6 @@ Core.Tests.DolphinTest subclass: #'OS.Tests.HRESULTTest'
 	classInstanceVariableNames: ''
 	classConstants: {}!
 Core.Tests.DolphinTest subclass: #'Core.Tests.IntegerTest'
-	instanceVariableNames: ''
-	classVariableNames: ''
-	imports: #()
-	classInstanceVariableNames: ''
-	classConstants: {}!
-Core.Tests.DolphinTest subclass: #'External.Tests.LibraryTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
 	imports: #()
@@ -924,7 +924,7 @@ Core.Tests.AbstractFileStreamTest subclass: #'Core.Tests.FileStreamTest'
 	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-Core.Tests.AbstractFileStreamTest subclass: #'External.Tests.StdioFileStreamTest'
+Core.Tests.AbstractFileStreamTest subclass: #'OS.Tests.StdioFileStreamTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
 	imports: #()
