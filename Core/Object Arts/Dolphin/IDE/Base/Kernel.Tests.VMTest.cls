@@ -481,7 +481,7 @@ testExtCallArgBstr
 	"Note that BSTR is one of the FFI parameter types that may cause the VM to perform a type conversion that allocates memory, and as such cannot be used safely in overlapped calls unless the calling code is careful to perform all conversions to BSTR from Smalltalk strings in advance with #asBSTR"
 
 	| beers olelib |
-	olelib := Smalltalk.OLEAutLibrary default.
+	olelib := OS.COM.OLEAutLibrary default.
 	{''. 'a'. '£2'. 'a' , (String with: Character null) , 'b'} do: 
 			[:each |
 			| subject expected actual |

@@ -79,13 +79,13 @@ package setClassNames: #(
 	#{Core.Tests.WriteStreamTest}
 	#{External.Tests}
 	#{External.Tests.AddressTest}
-	#{External.Tests.DescriptorTest}
 	#{External.Tests.DOUBLEArrayTest}
 	#{External.Tests.DWORDArrayTest}
 	#{External.Tests.DynamicLinkLibraryTest}
 	#{External.Tests.ExternalArrayTest}
 	#{External.Tests.ExternalFieldTest}
 	#{External.Tests.FLOATArrayTest}
+	#{External.Tests.FunctionDescriptorTest}
 	#{External.Tests.GenericExternalArrayTest}
 	#{External.Tests.GUIDTest}
 	#{External.Tests.ResourceLibraryTest}
@@ -324,12 +324,6 @@ Core.Tests.DolphinTest subclass: #'Core.Tests.DateTest'
 	imports: #()
 	classInstanceVariableNames: ''
 	classConstants: {}!
-Core.Tests.DolphinTest subclass: #'External.Tests.DescriptorTest'
-	instanceVariableNames: ''
-	classVariableNames: ''
-	imports: #(#{External.ExtCallArgTypes})
-	classInstanceVariableNames: ''
-	classConstants: {}!
 Core.Tests.DolphinTest subclass: #'OS.Tests.DiskVolumeInformationTest'
 	instanceVariableNames: ''
 	classVariableNames: ''
@@ -388,6 +382,12 @@ Core.Tests.DolphinTest subclass: #'Core.Tests.FloatTest'
 	instanceVariableNames: 'fpeMask'
 	classVariableNames: ''
 	imports: #()
+	classInstanceVariableNames: ''
+	classConstants: {}!
+Core.Tests.DolphinTest subclass: #'External.Tests.FunctionDescriptorTest'
+	instanceVariableNames: ''
+	classVariableNames: ''
+	imports: #(#{External.ExtCallArgTypes})
 	classInstanceVariableNames: ''
 	classConstants: {}!
 Core.Tests.DolphinTest subclass: #'External.Tests.GUIDTest'
